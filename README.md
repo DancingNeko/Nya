@@ -1,5 +1,5 @@
 # Tile Puzzle
-A simple classic games
+A classic puzzle game
 
 # Introduction:
 This is a beta version of classic tile puzzle game.  
