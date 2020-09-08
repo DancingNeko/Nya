@@ -1,5 +1,5 @@
 # Tile Puzzle
-simple classic games
+A simple classic games
 
 # Introduction:
 This is a beta version of classic tile puzzle game.  
@@ -13,7 +13,7 @@ As this is my first try of making UI with QT, there might be some bugs and short
 -Adding solution: Add 4x4,5x5,6x6 solution to the game.  
 -Cumtomized puzzle: user can upload picture for the puzzle.  
 
-# Usage
+# Usage:
 -This application need to be run under the win10 x64 environment. To open the .pro document, QT Creator is needed.  
 -If you just want to try this game rather than testing the code, you just need to download TilePuzzle_beta.exe.  
 P.S. also it need to be run under win10 x64 environment.
