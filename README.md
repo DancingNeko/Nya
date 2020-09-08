@@ -13,6 +13,7 @@ As this is my first try of making UI with QT, there might be some bugs and short
 -Adding solution: Add 4x4,5x5,6x6 solution to the game.  
 -Cumtomized puzzle: user can upload picture for the puzzle.  
 
-#Usage
+# Usage
 -This application need to be run under the win10 x64 environment. To open the .pro document, QT Creator is needed.  
--If you want to just try this game rather than using the code, you just need to download TilePuzzle_beta.exe or TilePuzzle_beta.zip.  P.S. also it need to be run under win10 x64 environment.
+-If you want to just try this game rather than using the code, you just need to download TilePuzzle_beta.exe or TilePuzzle_beta.zip.  
+P.S. also it need to be run under win10 x64 environment.
