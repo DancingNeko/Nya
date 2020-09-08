@@ -15,5 +15,5 @@ As this is my first try of making UI with QT, there might be some bugs and short
 
 # Usage
 -This application need to be run under the win10 x64 environment. To open the .pro document, QT Creator is needed.  
--If you just want to try this game rather than testing the code, you just need to download TilePuzzle_beta.exe.
+-If you just want to try this game rather than testing the code, you just need to download TilePuzzle_beta.exe.  
 P.S. also it need to be run under win10 x64 environment.
