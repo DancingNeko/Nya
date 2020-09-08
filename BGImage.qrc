@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>frame.png</file>
+        <file>frame1.png</file>
+        <file>frame2.png</file>
+        <file>frame4.png</file>
+        <file>animeCongrats.png</file>
+    </qresource>
+</RCC>
