@@ -4,6 +4,8 @@
 #include<iostream>
 #include<QProcess>
 #include<windows.h>
+#include<QtCore>
+#include<QWidget>
 using namespace std;
 
 int autoSpeed=1000;
@@ -11,6 +13,7 @@ int stepSize=150;
 int* a = new int [9];
 int* s=new int[stepSize];
 int stepCount=0;
+int paused=-1;
 QImage BCImage1(QString(":/frame1.png"));
 QImage BCImage2(QString(":/frame2.png"));
 QImage BCImage(QString(":/frame.png"));
@@ -34,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_9->setStyleSheet("background-color:rgb(0,0,0)");
     QFont fontS("MS Shell Dlg",25,20);
     ui->pushButton_14->setFont(fontS);
-    ui->pushButton_14->setStyleSheet("background-color:rgb(0,0,0); color:rgb(255,255,255)");
     for(int i=0;i<9;i++)
     {
         *(a+i)=i+1;
@@ -48,12 +50,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_11->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_12->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_13->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    ui->close->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    ui->restart->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    ui->reset->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->label_2->setStyleSheet("color:rgb(255,255,255)");
     ui->label_3->setStyleSheet("color:rgb(255,255,255)");
     ui->label_4->setStyleSheet("color:rgb(255,255,255)");
     ui->label_5->setStyleSheet("color:rgb(255,255,255)");
     ui->label->setPixmap(QPixmap::fromImage(BCImage4));
     ui->label->setVisible(false);
+    ui->reset->setVisible(false);
+    ui->restart->setVisible(false);
+    ui->close->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -74,7 +82,6 @@ void MainWindow::on_pushButton_clicked()
     operate(a,0);
     setText(a,ui);
     setColor(a,ui);
-    checkComplete(a, ui);
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -82,7 +89,6 @@ void MainWindow::on_pushButton_2_clicked()
     operate(a,1);
     setText(a,ui);
     setColor(a,ui);
-    checkComplete(a, ui);
 }
 
 void MainWindow::on_pushButton_3_clicked()
@@ -90,7 +96,6 @@ void MainWindow::on_pushButton_3_clicked()
     operate(a,2);
     setText(a,ui);
     setColor(a,ui);
-   checkComplete(a, ui);
 }
 
 void MainWindow::on_pushButton_4_clicked()
@@ -106,7 +111,6 @@ void MainWindow::on_pushButton_5_clicked()
     operate(a,4);
     setText(a,ui);
     setColor(a,ui);
-    checkComplete(a, ui);
 }
 
 void MainWindow::on_pushButton_6_clicked()
@@ -114,7 +118,6 @@ void MainWindow::on_pushButton_6_clicked()
     operate(a,5);
     setText(a,ui);
     setColor(a,ui);
-    checkComplete(a,ui);
 }
 
 void MainWindow::on_pushButton_7_clicked()
@@ -122,7 +125,6 @@ void MainWindow::on_pushButton_7_clicked()
     operate(a,6);
     setText(a,ui);
     setColor(a,ui);
-    checkComplete(a, ui);
 }
 
 void MainWindow::on_pushButton_8_clicked()
@@ -130,7 +132,6 @@ void MainWindow::on_pushButton_8_clicked()
     operate(a,7);
     setText(a,ui);
     setColor(a,ui);
-    checkComplete(a, ui);
 }
 
 void MainWindow::on_pushButton_9_clicked()
@@ -138,7 +139,16 @@ void MainWindow::on_pushButton_9_clicked()
     operate(a,8);
     setText(a,ui);
     setColor(a,ui);
-    checkComplete(a, ui);
+    if(checkComplete(a, ui))
+    {
+        repaint();
+        Sleep(1000);
+        ui->label->setVisible(true);
+        repaint();
+        Sleep(4000);
+        QCoreApplication::exit(0);
+        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    }
 }
 
 
@@ -184,27 +194,60 @@ void MainWindow::on_pushButton_13_clicked()
     ui->label_5->setStyleSheet("color:rgb(159,116,255)");
 }
 
-void MainWindow::on_pushButton_14_clicked()
+
+void MainWindow::on_pushButton_14_toggled(bool checked)
 {
     if(stepCount == 0)
     {
     s=autoComplete(a, ui, s);
     }
-    while(checkComplete(a,ui))
+    int i=0;
+    if(checked)
+        paused++;
+    while(checked && paused==0)
     {
+        if(checkComplete(a,ui))
+        {
+
+            Sleep(1000);
+            ui->label->setVisible(true);
+            ui->label->raise();
+            repaint();
+            Sleep(1000);
+            break;
+        }
+        QApplication::processEvents();
+        QString stepCountNum=QString::number(i);
+        ui->pushButton_14->setText(stepCountNum);
         showStep(a, *(s+stepCount), stepCount);
         setText(a,ui);
         setColor(a,ui);
+        ui->pushButton->repaint();
+        ui->pushButton_2->repaint();
+        ui->pushButton_3->repaint();
+        ui->pushButton_4->repaint();
+        ui->pushButton_5->repaint();
+        ui->pushButton_6->repaint();
+        ui->pushButton_7->repaint();
+        ui->pushButton_8->repaint();
+        ui->pushButton_9->repaint();
         Sleep(autoSpeed);
         repaint();
+        i++;
     }
-    repaint();
-    Sleep(1000);
-    ui->label->setVisible(true);
-    repaint();
-    Sleep(4000);
-    QCoreApplication::exit(0);
-    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    if(!checkComplete(a,ui))
+    {
+        paused++;
+        ui->reset->setVisible(true);
+        repaint();
+    }
+    if(checkComplete(a,ui))
+    {
+        ui->restart->setVisible(true);
+        ui->restart->raise();
+        ui->close->setVisible(true);
+        ui->close->raise();
+    }
 }
 
 
@@ -212,7 +255,35 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
     autoSpeed=1000-10*value;
     QString speedInfo;
-    speedInfo=QString::number((float)1000/autoSpeed);
+    if(value<40)
+        speedInfo="slow";
+    if(value>=40 && value<=80)
+        speedInfo="medium";
+    if(value>80)
+        speedInfo="fast";
     ui->label_4->setText(speedInfo);
     repaint();
+}
+
+void MainWindow::on_reset_clicked()
+{
+    for(int i=0;i<stepSize;i++)
+    {
+        *(s+i)=0;
+    }
+    paused=-1;
+    stepCount=0;
+    ui->pushButton_14->setText("Auto");
+    ui->reset->setVisible(false);
+}
+
+void MainWindow::on_close_clicked()
+{
+     QCoreApplication::exit(0);
+}
+
+void MainWindow::on_restart_clicked()
+{
+    QCoreApplication::exit(0);
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }

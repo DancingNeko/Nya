@@ -6,7 +6,6 @@ int down1(int a[], int slider, int step[], int depth);
 int up1(int a[], int slider, int step[], int depth);
 int left1(int a[], int slider, int step[], int depth);
 int right1(int a[], int slider, int step[], int depth);
-int search_depth = 20;
 int tile_puzzle();
 int step[200] = { 0 };
 int c = 0;
@@ -692,6 +691,11 @@ int* output(int* a)
 
 int* autoComplete(int array[], Ui::MainWindow* ui, int* s)
 {
+    c=0;
+    for(int i=0;i<200;i++)
+    {
+        step[i]={0};
+    }
     int a[9];
     for(int i=0;i<9;i++)
     {

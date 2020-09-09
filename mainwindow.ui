@@ -239,6 +239,9 @@
     <property name="text">
      <string>Auto</string>
     </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QSlider" name="horizontalSlider">
     <property name="geometry">
@@ -274,9 +277,9 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>980</x>
+      <x>990</x>
       <y>160</y>
-      <width>101</width>
+      <width>105</width>
       <height>16</height>
      </rect>
     </property>
@@ -286,20 +289,20 @@
      </font>
     </property>
     <property name="text">
-     <string>1</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;slow&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>1070</x>
+      <x>900</x>
       <y>155</y>
-      <width>101</width>
+      <width>105</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>steps per seconds</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Auto Speed&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
@@ -327,6 +330,70 @@
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="reset">
+    <property name="geometry">
+     <rect>
+      <x>1100</x>
+      <y>105</y>
+      <width>50</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+      <underline>true</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="restart">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>530</y>
+      <width>200</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>15</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+      <underline>true</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>Play Again!</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="close">
+    <property name="geometry">
+     <rect>
+      <x>565</x>
+      <y>600</y>
+      <width>150</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>15</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+      <underline>true</underline>
+     </font>
+    </property>
+    <property name="text">
+     <string>Close</string>
+    </property>
+   </widget>
    <zorder>label_6</zorder>
    <zorder>pushButton</zorder>
    <zorder>pushButton_2</zorder>
@@ -348,6 +415,9 @@
    <zorder>label_4</zorder>
    <zorder>label_5</zorder>
    <zorder>label</zorder>
+   <zorder>reset</zorder>
+   <zorder>restart</zorder>
+   <zorder>close</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
