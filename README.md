@@ -1,5 +1,6 @@
 # Tile Puzzle
 A classic puzzle game  
+  
 ![LOGO](./Logo.ico)
 
 # Introduction:
