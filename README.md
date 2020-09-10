@@ -1,5 +1,6 @@
 # Tile Puzzle
 A classic puzzle game
+![Tile Puzzle Logo](./TilePuzzle.ico)  
 
 # Introduction:
 This is a beta version of classic tile puzzle game.  
