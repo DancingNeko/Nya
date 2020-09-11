@@ -11,6 +11,7 @@ using namespace std;
 int autoSpeed=1000;
 int stepSize=150;
 int* a = new int [9];
+int* b= new int [16];
 int* s=new int[stepSize];
 int stepCount=0;
 int paused=-1;
@@ -18,13 +19,39 @@ QImage BCImage1(QString(":/frame1.png"));
 QImage BCImage2(QString(":/frame2.png"));
 QImage BCImage(QString(":/frame.png"));
 QImage BCImage4(QString(":/animeCongrats.png"));
+QImage BCImage3(QString(":frame3.png"));
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QFont font("SimSun-ExtB",60,75);
+    ui->pushButton->setVisible(false);
+    ui->pushButton_2->setVisible(false);
+    ui->pushButton_3->setVisible(false);
+    ui->pushButton_4->setVisible(false);
+    ui->pushButton_5->setVisible(false);
+    ui->pushButton_6->setVisible(false);
+    ui->pushButton_7->setVisible(false);
+    ui->pushButton_8->setVisible(false);
+    ui->pushButton_9->setVisible(false);
+    ui->four_1->setVisible(false);
+    ui->four_2->setVisible(false);
+    ui->four_3->setVisible(false);
+    ui->four_4->setVisible(false);
+    ui->four_5->setVisible(false);
+    ui->four_6->setVisible(false);
+    ui->four_7->setVisible(false);
+    ui->four_8->setVisible(false);
+    ui->four_9->setVisible(false);
+    ui->four_10->setVisible(false);
+    ui->four_11->setVisible(false);
+    ui->four_12->setVisible(false);
+    ui->four_13->setVisible(false);
+    ui->four_14->setVisible(false);
+    ui->four_15->setVisible(false);
+    ui->four_16->setVisible(false);
+    QFont font("Arial",60,20);
     ui->pushButton->setFont(font);
     ui->pushButton_2->setFont(font);
     ui->pushButton_3->setFont(font);
@@ -34,6 +61,22 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_7->setFont(font);
     ui->pushButton_8->setFont(font);
     ui->pushButton_9->setFont(font);
+    ui->four_1->setFont(font);
+    ui->four_2->setFont(font);
+    ui->four_3->setFont(font);
+    ui->four_4->setFont(font);
+    ui->four_5->setFont(font);
+    ui->four_6->setFont(font);
+    ui->four_7->setFont(font);
+    ui->four_8->setFont(font);
+    ui->four_9->setFont(font);
+    ui->four_10->setFont(font);
+    ui->four_11->setFont(font);
+    ui->four_12->setFont(font);
+    ui->four_13->setFont(font);
+    ui->four_14->setFont(font);
+    ui->four_15->setFont(font);
+    ui->four_16->setFont(font);
     ui->pushButton_9->setStyleSheet("background-color:rgb(0,0,0)");
     QFont fontS("MS Shell Dlg",25,20);
     ui->pushButton_14->setFont(fontS);
@@ -42,14 +85,18 @@ MainWindow::MainWindow(QWidget *parent)
         *(a+i)=i+1;
     }
     *(a+8)=0;
-    setText(a,ui);
-    setColor(a,ui);
+    for(int i=0;i<16;i++)
+    {
+        *(b+i)=i+1;
+    }
+    *(b+15)=0;
     ui->label_6->setPixmap(QPixmap::fromImage(BCImage));
     ui->pushButton_10->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_14->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_11->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_12->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_13->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    ui->pushButton_15->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->close->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->restart->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->reset->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
@@ -71,83 +118,95 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_10_clicked()
 {
-    a=initializePuzzle(a,100000);
-    setText(a,ui);
-    setColor(a,ui);
+    a=initializePuzzle(a,100000,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
+    ui->pushButton->setVisible(true);
+    ui->pushButton_2->setVisible(true);
+    ui->pushButton_3->setVisible(true);
+    ui->pushButton_4->setVisible(true);
+    ui->pushButton_5->setVisible(true);
+    ui->pushButton_6->setVisible(true);
+    ui->pushButton_7->setVisible(true);
+    ui->pushButton_8->setVisible(true);
+    ui->pushButton_9->setVisible(true);
+    ui->pushButton_10->setVisible(true);
     ui->pushButton_10->setVisible(false);
+    ui->pushButton_15->setVisible(false);
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    operate(a,0);
-    setText(a,ui);
-    setColor(a,ui);
+    operate(a,0,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    operate(a,1);
-    setText(a,ui);
-    setColor(a,ui);
+    operate(a,1,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    operate(a,2);
-    setText(a,ui);
-    setColor(a,ui);
+    operate(a,2,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
 }
 
 void MainWindow::on_pushButton_4_clicked()
 {
-    operate(a,3);
-    setText(a,ui);
-    setColor(a,ui);
-    checkComplete(a, ui);
+    operate(a,3,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
 }
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    operate(a,4);
-    setText(a,ui);
-    setColor(a,ui);
+    operate(a,4,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
 }
 
 void MainWindow::on_pushButton_6_clicked()
 {
-    operate(a,5);
-    setText(a,ui);
-    setColor(a,ui);
+    operate(a,5,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
 }
 
 void MainWindow::on_pushButton_7_clicked()
 {
-    operate(a,6);
-    setText(a,ui);
-    setColor(a,ui);
+    operate(a,6,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
 }
 
 void MainWindow::on_pushButton_8_clicked()
 {
-    operate(a,7);
-    setText(a,ui);
-    setColor(a,ui);
+    operate(a,7,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
 }
 
 void MainWindow::on_pushButton_9_clicked()
 {
-    operate(a,8);
-    setText(a,ui);
-    setColor(a,ui);
-    if(checkComplete(a, ui))
+    operate(a,8,9);
+    setText(a,ui,9);
+    setColor(a,ui,9);
+    if(checkComplete(a, 9))
     {
         repaint();
         Sleep(1000);
         ui->label->setVisible(true);
         repaint();
-        Sleep(4000);
-        QCoreApplication::exit(0);
-        QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+        Sleep(1000);
+        ui->restart->setVisible(true);
+        ui->restart->raise();
+        ui->close->setVisible(true);
+        ui->close->raise();
     }
 }
 
@@ -180,18 +239,24 @@ void MainWindow::on_pushButton_12_clicked()
     ui->label_5->setStyleSheet("color:rgb(255,255,255)");
 }
 
+int Switch=0;
 void MainWindow::on_pushButton_13_clicked()
 {
+    Switch++;
+    if(Switch%2==1)
     ui->label_6->setPixmap(QPixmap::fromImage(BCImage2));
-    ui->pushButton_10->setStyleSheet("background-color:rgb(255,158,217); color:rgb(159,116,255)");
-    ui->pushButton_14->setStyleSheet("background-color:rgb(255,158,217); color:rgb(159,116,255)");
-    ui->pushButton_11->setStyleSheet("background-color:rgb(255,158,217); color:rgb(159,116,255)");
-    ui->pushButton_12->setStyleSheet("background-color:rgb(255,158,217); color:rgb(159,116,255)");
-    ui->pushButton_13->setStyleSheet("background-color:rgb(255,158,217); color:rgb(159,116,255)");
-    ui->label_2->setStyleSheet("color:rgb(159,116,255)");
-    ui->label_3->setStyleSheet("color:rgb(159,116,255)");
-    ui->label_4->setStyleSheet("color:rgb(159,116,255)");
-    ui->label_5->setStyleSheet("color:rgb(159,116,255)");
+    if(Switch%2==0)
+    ui->label_6->setPixmap(QPixmap::fromImage(BCImage3));
+    repaint();
+    ui->pushButton_10->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    ui->pushButton_14->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    ui->pushButton_11->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    ui->pushButton_12->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    ui->pushButton_13->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    ui->label_2->setStyleSheet("color:rgb(255,180,241)");
+    ui->label_3->setStyleSheet("color:rgb(255,180,241)");
+    ui->label_4->setStyleSheet("color:rgb(255,180,241)");
+    ui->label_5->setStyleSheet("color:rgb(255,180,241)");
 }
 
 
@@ -206,7 +271,7 @@ void MainWindow::on_pushButton_14_toggled(bool checked)
         paused++;
     while(checked && paused==0)
     {
-        if(checkComplete(a,ui))
+        if(checkComplete(a,9))
         {
 
             Sleep(1000);
@@ -220,8 +285,8 @@ void MainWindow::on_pushButton_14_toggled(bool checked)
         QString stepCountNum=QString::number(i);
         ui->pushButton_14->setText(stepCountNum);
         showStep(a, *(s+stepCount), stepCount);
-        setText(a,ui);
-        setColor(a,ui);
+        setText(a,ui,9);
+        setColor(a,ui,9);
         ui->pushButton->repaint();
         ui->pushButton_2->repaint();
         ui->pushButton_3->repaint();
@@ -235,13 +300,13 @@ void MainWindow::on_pushButton_14_toggled(bool checked)
         repaint();
         i++;
     }
-    if(!checkComplete(a,ui))
+    if(!checkComplete(a,9))
     {
         paused++;
         ui->reset->setVisible(true);
         repaint();
     }
-    if(checkComplete(a,ui))
+    if(checkComplete(a,9))
     {
         ui->restart->setVisible(true);
         ui->restart->raise();
@@ -287,3 +352,160 @@ void MainWindow::on_restart_clicked()
     QCoreApplication::exit(0);
     QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }
+
+void MainWindow::on_four_1_clicked()
+{
+    operate(b,0,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_2_clicked()
+{
+    operate(b,1,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_3_clicked()
+{
+    operate(b,2,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_4_clicked()
+{
+    operate(b,3,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_5_clicked()
+{
+    operate(b,4,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_6_clicked()
+{
+    operate(b,5,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_7_clicked()
+{
+    operate(b,6,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_8_clicked()
+{
+    operate(b,7,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_9_clicked()
+{
+    operate(b,8,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_10_clicked()
+{
+    operate(b,9,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_11_clicked()
+{
+    operate(b,10,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_12_clicked()
+{
+    operate(b,11,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_13_clicked()
+{
+    operate(b,12,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_14_clicked()
+{
+    operate(b,13,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_15_clicked()
+{
+    operate(b,14,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+}
+
+void MainWindow::on_four_16_clicked()
+{
+    operate(b,15,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+    if(checkComplete(b, 16))
+    {
+        cout<<"done"<<endl;
+        repaint();
+        Sleep(1000);
+        ui->label->setVisible(true);
+        ui->label->raise();
+        repaint();
+        Sleep(1000);
+        ui->restart->setVisible(true);
+        ui->restart->raise();
+        ui->close->setVisible(true);
+        ui->close->raise();
+    }
+}
+
+void MainWindow::on_pushButton_15_clicked()
+{
+    b=initializePuzzle(b,100000,16);
+    setText(b,ui,16);
+    setColor(b,ui,16);
+    ui->four_1->setVisible(true);
+    ui->four_2->setVisible(true);
+    ui->four_3->setVisible(true);
+    ui->four_4->setVisible(true);
+    ui->four_5->setVisible(true);
+    ui->four_6->setVisible(true);
+    ui->four_7->setVisible(true);
+    ui->four_8->setVisible(true);
+    ui->four_9->setVisible(true);
+    ui->four_10->setVisible(true);
+    ui->four_11->setVisible(true);
+    ui->four_12->setVisible(true);
+    ui->four_13->setVisible(true);
+    ui->four_14->setVisible(true);
+    ui->four_15->setVisible(true);
+    ui->four_16->setVisible(true);
+    ui->pushButton_10->setVisible(false);
+    ui->pushButton_15->setVisible(false);
+    ui->pushButton_14->setVisible(false);
+    ui->label_3->setVisible(false);
+    ui->label_4->setVisible(false);
+    ui->label_5->setVisible(false);
+    ui->horizontalSlider->setVisible(false);
+}
+

@@ -5,5 +5,6 @@
         <file>frame2.png</file>
         <file>frame4.png</file>
         <file>animeCongrats.png</file>
+        <file>frame3.png</file>
     </qresource>
 </RCC>
