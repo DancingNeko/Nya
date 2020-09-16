@@ -1,7 +1,7 @@
 #ifndef PLAY_H
 #define PLAY_H
 #include <ui_mainwindow.h>
-void showStep(int* a, int step,int& i);
+void showStep(int* a, int step,int& i, int dim);
 int* autoComplete(int array[], Ui::MainWindow* ui,int* s);
 bool checkComplete(int* a, int size);
 int tile_puzzle(int a[]);
@@ -12,4 +12,5 @@ void moveSlide(int* a, int n, int slider);
 int operate(int* a, int move, int size);
 void setColor(int* a,Ui::MainWindow* ui, int size);
 void setText(int* a, Ui::MainWindow* ui, int size);
+int* entry(int puzzle[], int dimension, int& stepsNeeded);
 #endif // PLAY_H

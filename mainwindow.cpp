@@ -9,17 +9,17 @@
 using namespace std;
 
 int autoSpeed=1000;
-int stepSize=150;
 int* a = new int [9];
 int* b= new int [16];
-int* s=new int[stepSize];
 int stepCount=0;
 int paused=-1;
+int dimension;
 QImage BCImage1(QString(":/frame1.png"));
 QImage BCImage2(QString(":/frame2.png"));
 QImage BCImage(QString(":/frame.png"));
 QImage BCImage4(QString(":/animeCongrats.png"));
 QImage BCImage3(QString(":frame3.png"));
+int* steps;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -92,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
     *(b+15)=0;
     ui->label_6->setPixmap(QPixmap::fromImage(BCImage));
     ui->pushButton_10->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    ui->restart_2->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_14->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_11->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_12->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
@@ -118,6 +119,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_10_clicked()
 {
+    dimension = 3;
     a=initializePuzzle(a,100000,9);
     setText(a,ui,9);
     setColor(a,ui,9);
@@ -262,51 +264,97 @@ void MainWindow::on_pushButton_13_clicked()
 
 void MainWindow::on_pushButton_14_toggled(bool checked)
 {
-    if(stepCount == 0)
-    {
-    s=autoComplete(a, ui, s);
-    }
     int i=0;
+    int stepsNeeded;
     if(checked)
         paused++;
-    while(checked && paused==0)
+    if(paused == 0 && dimension == 3)
     {
-        if(checkComplete(a,9))
-        {
-
-            Sleep(1000);
-            ui->label->setVisible(true);
-            ui->label->raise();
-            repaint();
-            Sleep(1000);
-            break;
-        }
-        QApplication::processEvents();
-        QString stepCountNum=QString::number(i);
-        ui->pushButton_14->setText(stepCountNum);
-        showStep(a, *(s+stepCount), stepCount);
-        setText(a,ui,9);
-        setColor(a,ui,9);
-        ui->pushButton->repaint();
-        ui->pushButton_2->repaint();
-        ui->pushButton_3->repaint();
-        ui->pushButton_4->repaint();
-        ui->pushButton_5->repaint();
-        ui->pushButton_6->repaint();
-        ui->pushButton_7->repaint();
-        ui->pushButton_8->repaint();
-        ui->pushButton_9->repaint();
-        Sleep(autoSpeed);
-        repaint();
-        i++;
+        steps = entry(a, dimension, stepsNeeded);
     }
-    if(!checkComplete(a,9))
+    if(paused == 0 && dimension == 4)
+    {
+        steps = entry(b, dimension, stepsNeeded);
+    }
+    if(dimension==3)
+    {
+        while(checked && paused==0)
+        {
+            if(checkComplete(a,dimension*dimension))
+            {
+
+                Sleep(1000);
+                ui->label->setVisible(true);
+                ui->label->raise();
+                repaint();
+                Sleep(1000);
+                break;
+            }
+            QApplication::processEvents();
+            QString stepCountNum=QString::number(i);
+            ui->pushButton_14->setText(stepCountNum);
+            showStep(a, *(steps+stepCount), stepCount, dimension);
+            setText(a,ui,dimension*dimension);
+            setColor(a,ui,dimension*dimension);
+            ui->pushButton->repaint();
+            ui->pushButton_2->repaint();
+            ui->pushButton_3->repaint();
+            ui->pushButton_4->repaint();
+            ui->pushButton_5->repaint();
+            ui->pushButton_6->repaint();
+            ui->pushButton_7->repaint();
+            ui->pushButton_8->repaint();
+            ui->pushButton_9->repaint();
+            Sleep(autoSpeed);
+            repaint();
+            i++;
+        }
+    }
+    if(dimension==4)
+    {
+        while(checked && paused==0)
+        {
+            if(checkComplete(b,dimension*dimension))
+            {
+
+                Sleep(1000);
+                ui->label->setVisible(true);
+                ui->label->raise();
+                repaint();
+                Sleep(1000);
+                break;
+            }
+            QApplication::processEvents();
+            QString stepCountNum=QString::number(i);
+            ui->pushButton_14->setText(stepCountNum);
+            showStep(b, *(steps+stepCount), stepCount, dimension);
+            setText(b,ui,dimension*dimension);
+            setColor(b,ui,dimension*dimension);
+            ui->centralwidget->repaint();
+            Sleep(autoSpeed);
+            i++;
+        }
+    }
+    if(!checkComplete(a,dimension*dimension)&&dimension==3)
     {
         paused++;
         ui->reset->setVisible(true);
         repaint();
     }
-    if(checkComplete(a,9))
+    if(checkComplete(a,dimension*dimension)&&dimension==3)
+    {
+        ui->restart->setVisible(true);
+        ui->restart->raise();
+        ui->close->setVisible(true);
+        ui->close->raise();
+    }
+    if(!checkComplete(b,dimension*dimension)&&dimension==4)
+    {
+        paused++;
+        ui->reset->setVisible(true);
+        repaint();
+    }
+    if(checkComplete(b,dimension*dimension)&&dimension==4)
     {
         ui->restart->setVisible(true);
         ui->restart->raise();
@@ -332,10 +380,8 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 
 void MainWindow::on_reset_clicked()
 {
-    for(int i=0;i<stepSize;i++)
-    {
-        *(s+i)=0;
-    }
+    delete[] steps;
+    steps=NULL;
     paused=-1;
     stepCount=0;
     ui->pushButton_14->setText("Auto");
@@ -481,6 +527,7 @@ void MainWindow::on_four_16_clicked()
 
 void MainWindow::on_pushButton_15_clicked()
 {
+    dimension = 4;
     b=initializePuzzle(b,100000,16);
     setText(b,ui,16);
     setColor(b,ui,16);
@@ -502,10 +549,16 @@ void MainWindow::on_pushButton_15_clicked()
     ui->four_16->setVisible(true);
     ui->pushButton_10->setVisible(false);
     ui->pushButton_15->setVisible(false);
-    ui->pushButton_14->setVisible(false);
-    ui->label_3->setVisible(false);
-    ui->label_4->setVisible(false);
-    ui->label_5->setVisible(false);
-    ui->horizontalSlider->setVisible(false);
+    ui->pushButton_14->setVisible(true);
+    ui->label_3->setVisible(true);
+    ui->label_4->setVisible(true);
+    ui->label_5->setVisible(true);
+    ui->horizontalSlider->setVisible(true);
 }
 
+
+void MainWindow::on_restart_2_clicked()
+{
+    QCoreApplication::exit(0);
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+}

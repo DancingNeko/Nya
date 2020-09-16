@@ -1,4 +1,4 @@
-#include<stdlib.h>
+ #include<stdlib.h>
 #include<time.h>
 using namespace std;
 #include <ui_mainwindow.h>
@@ -401,25 +401,25 @@ bool checkComplete(int* a, int size)
     return true;
 }
 
-void up(int* a)
+void up(int* a,int dim)
 {
     int i=0;
     while(*(a+i)!=0)
         i++;
     int temp=*(a+i);
-    *(a+i)=*(a+i-3);
-    *(a+i-3)=temp;
+    *(a+i)=*(a+i-dim);
+    *(a+i-dim)=temp;
 }
-void down(int* a)
+void down(int* a,int dim)
 {
     int i=0;
     while(*(a+i)!=0)
         i++;
     int temp=*(a+i);
-    *(a+i)=*(a+i+3);
-    *(a+i+3)=temp;
+    *(a+i)=*(a+i+dim);
+    *(a+i+dim)=temp;
 }
-void left(int* a)
+void left(int* a,int dim)
 {
     int i=0;
     while(*(a+i)!=0)
@@ -428,7 +428,7 @@ void left(int* a)
     *(a+i)=*(a+i-1);
     *(a+i-1)=temp;
 }
-void right(int* a)
+void right(int* a,int dim)
 {
     int i=0;
     while(*(a+i)!=0)
@@ -438,15 +438,15 @@ void right(int* a)
     *(a+i+1)=temp;
 }
 
-void showStep(int* a,int step, int& i)
+void showStep(int* a,int step, int& i, int dim)
 {
      if(step==1)
-         up(a);
+         up(a,dim);
      if(step==2)
-         down(a);
+         down(a,dim);
      if(step==3)
-         left(a);
+         left(a,dim);
      if(step==4)
-         right(a);
+         right(a,dim);
      i++;
 }
