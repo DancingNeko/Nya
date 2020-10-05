@@ -364,16 +364,23 @@ void castPuzzle(int a[], int target, int dim)//target: the one put on the top le
 void moveSliderBR(int a[], int dim, int target, int& sliderLoc)//move target to the bottom right
 {
     while (sliderLoc % dim != dim - 1)//move slider to the moveable area
-    {
-        if (a[sliderLoc + 1] != target)
-            moveSlider(a, sliderLoc, +1, dim, dim);
-        else if (moveSlider(a, sliderLoc, +dim, dim, dim) == true)
-            continue;
-        else
-            moveSlider(a, sliderLoc, -dim, dim, dim);
-    }
-    while (a[dim * dim - 1] != 0)
-        moveSlider(a, sliderLoc, +dim, dim, dim);
+        {
+            if (a[sliderLoc + 1] != target)
+                moveSlider(a, sliderLoc, +1, dim, dim);
+            else if (moveSlider(a, sliderLoc, +dim, dim, dim) == true)
+                continue;
+            else
+                moveSlider(a, sliderLoc, -dim, dim, dim);
+        }
+        while (a[dim * dim - 1] != 0)
+        {
+            if (a[sliderLoc + dim] != target && sliderLoc / dim != dim - 1)
+                moveSlider(a, sliderLoc, +dim, dim, dim);
+            else if (moveSlider(a, sliderLoc, +1, dim, dim))
+                continue;
+            else
+                moveSlider(a, sliderLoc, -1, dim, dim);
+        }
 }
 
 void moveTargetRight(int a[], int& slider, int targetLoc, int w, int h)//move target right a tile; slider: sliderLoc

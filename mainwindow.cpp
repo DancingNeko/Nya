@@ -6,6 +6,7 @@
 #include<windows.h>
 #include<QtCore>
 #include<QWidget>
+#include <QMessageBox>
 using namespace std;
 
 int autoSpeed=1000;
@@ -268,6 +269,8 @@ void MainWindow::on_pushButton_14_toggled(bool checked)
     int stepsNeeded;
     if(checked)
         paused++;
+    //auto reply = QMessageBox::question(this, "Save", "Do you want to save your changes?",
+    //    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     if(paused == 0 && dimension == 3)
     {
         steps = entry(a, dimension, stepsNeeded);
@@ -276,6 +279,8 @@ void MainWindow::on_pushButton_14_toggled(bool checked)
     {
         steps = entry(b, dimension, stepsNeeded);
     }
+    //auto reply_1 = QMessageBox::question(this, "Save", "Do you want to save your changes?",
+    //    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     if(dimension==3)
     {
         while(checked && paused==0)
