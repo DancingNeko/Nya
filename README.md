@@ -11,7 +11,7 @@ As this is my first try of making UI with QT, there might be some bugs and short
 # Current Goal:
 -[x]Fix bug: When pressing the other buttons while the puzzle is auto solving, the application will crash.  
 -[ ]Optimize UI: Make the background and button stretch to the optimal size when resizing the window.  
--[X]Adding extra choices: Add 4x4, 5x5, 6x6 options to the game.  
+-[x]Adding extra choices: Add 4x4, 5x5, 6x6 options to the game.  
 -[x]Adding solution: Add 4x4,5x5,6x6 solution to the game.  
 -[ ]Cumtomized puzzle: user can upload picture for the puzzle.  
 
