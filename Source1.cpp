@@ -58,10 +58,12 @@ int* deleteBlanks(int steps[], int& stepCount)
 void updateStepCount(int* step, int& stepCount)
 {
     int i = 0;
-    while (step[i] == 4 || step[i] == 3 || step[i] == 2 || step[i] == 1 || step[i] == -1)
+    int j = 0;
+    while ((step[i] == 4 || step[i] == 3 || step[i] == 2 || step[i] == 1 || step[i] == -1) && j < stepCount)
     {
         if (step[i] != -1)
             i++;
+        j++;
     }
     stepCount = i;
 }
