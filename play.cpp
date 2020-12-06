@@ -4,31 +4,34 @@ using namespace std;
 #include <ui_mainwindow.h>
 #include<windows.h>
 #include<QProcess>
+#include <assert.h>
 
-void moveSlide(int* a, int n, int slider)
+void moveSlide(int* tempPuzzle, int n, int slider)
 {
-    int temp = *(a + n);
-    *(a + n) = *(a + slider);
-    *(a + slider) = temp;
+    int temp = *(tempPuzzle + n);
+    *(tempPuzzle + n) = *(tempPuzzle + slider);
+    *(tempPuzzle + slider) = temp;
 }
 
-int checkSlider(int* a)
+int checkSlider(int* tempPuzzle, int size)
 {
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < size; i++)
     {
-        if (*(a + i) == 0)
+        if (*(tempPuzzle + i) == 0)
             return i;
     }
+    assert(!"Failed to check slider");
+    return -1;
 }
 
-int operate(int* a, int move, int size)
+int operate(int* tempPuzzle, int move, int size)
 {
     if(size==9)
     {
-    int slider = checkSlider(a);
+    int slider = checkSlider(tempPuzzle, size);
     if (slider - move == 1 || slider - move == -1 || slider - move == 3 || slider - move == -3)
     {
-        moveSlide(a, move, slider);
+        moveSlide(tempPuzzle, move, slider);
         return 1;
     }
     else
@@ -36,18 +39,19 @@ int operate(int* a, int move, int size)
     }
     if(size==16)
     {
-        int slider = checkSlider(a);
+        int slider = checkSlider(tempPuzzle, size);
         if (slider - move == 1 || slider - move == -1 || slider - move == 4 || slider - move == -4)
         {
-            moveSlide(a, move, slider);
+            moveSlide(tempPuzzle, move, slider);
             return 1;
         }
         else
             return 0;
     }
+    return 0;
 }
 
-void setNum(int* a, int choice)
+void setNum(int* tempPuzzle, int choice)
 {
     int* b = new int[choice];
     int n = 0;
@@ -56,7 +60,7 @@ void setNum(int* a, int choice)
         int count = 0;
         for (int j = 0; j < 9; j++)
         {
-            if (a[j] == i)
+            if (tempPuzzle[j] == i)
                 count = 1;
         }
         if (count == 0)
@@ -66,23 +70,23 @@ void setNum(int* a, int choice)
         }
     }
     int randSeed = rand() % choice;
-    *(a + 9 - choice) = b[randSeed];
+    *(tempPuzzle + 9 - choice) = b[randSeed];
     delete[] b;
 }
 
-bool Up(int a[],int slider, int size)
+bool Up(int tempPuzzle[],int slider, int size)
 {
     if(size==9)
     {
         for (int i = 0; i< 9; i++)
         {
-            if (a[i] == slider)
+            if (tempPuzzle[i] == slider)
             {
                 if (i < 3)
                     return false;
-                int temp = a[i];
-                a[i] = a[i - 3];
-                a[i - 3] = temp;
+                int temp = tempPuzzle[i];
+                tempPuzzle[i] = tempPuzzle[i - 3];
+                tempPuzzle[i - 3] = temp;
                 return true;
             }
         }
@@ -91,31 +95,32 @@ bool Up(int a[],int slider, int size)
     {
         for (int i = 0; i< 16; i++)
         {
-            if (a[i] == slider)
+            if (tempPuzzle[i] == slider)
             {
                 if (i < 4)
                     return false;
-                int temp = a[i];
-                a[i] = a[i - 4];
-                a[i - 4] = temp;
+                int temp = tempPuzzle[i];
+                tempPuzzle[i] = tempPuzzle[i - 4];
+                tempPuzzle[i - 4] = temp;
                 return true;
             }
         }
     }
+    return false;
 }
-bool Down(int a[], int slider, int size)
+bool Down(int tempPuzzle[], int slider, int size)
 {
     if(size==9)
     {
         for (int i = 0; i < 9; i++)
         {
-            if (a[i] == slider)
+            if (tempPuzzle[i] == slider)
             {
                 if (i > 5)
                     return false;
-                int temp = a[i];
-                a[i] = a[i + 3];
-                a[i + 3] = temp;
+                int temp = tempPuzzle[i];
+                tempPuzzle[i] = tempPuzzle[i + 3];
+                tempPuzzle[i + 3] = temp;
                 return true;
             }
         }
@@ -124,31 +129,32 @@ bool Down(int a[], int slider, int size)
     {
         for (int i = 0; i< 16; i++)
         {
-            if (a[i] == slider)
+            if (tempPuzzle[i] == slider)
             {
                 if (i > 11)
                     return false;
-                int temp = a[i];
-                a[i] = a[i + 4];
-                a[i + 4] = temp;
+                int temp = tempPuzzle[i];
+                tempPuzzle[i] = tempPuzzle[i + 4];
+                tempPuzzle[i + 4] = temp;
                 return true;
             }
         }
     }
+    return false;
 }
-bool Left(int a[], int slider, int size)
+bool Left(int tempPuzzle[], int slider, int size)
 {
     if(size==9)
     {
         for (int i = 0; i < 9; i++)
         {
-            if (a[i] == slider)
+            if (tempPuzzle[i] == slider)
             {
                 if (i%3==0)
                     return false;
-                int temp = a[i];
-                a[i] = a[i - 1];
-                a[i - 1] = temp;
+                int temp = tempPuzzle[i];
+                tempPuzzle[i] = tempPuzzle[i - 1];
+                tempPuzzle[i - 1] = temp;
                 return true;
             }
         }
@@ -157,31 +163,32 @@ bool Left(int a[], int slider, int size)
     {
         for (int i = 0; i< 16; i++)
         {
-            if (a[i] == slider)
+            if (tempPuzzle[i] == slider)
             {
                 if (i%4==0)
                     return false;
-                int temp = a[i];
-                a[i] = a[i - 1];
-                a[i - 1] = temp;
+                int temp = tempPuzzle[i];
+                tempPuzzle[i] = tempPuzzle[i - 1];
+                tempPuzzle[i - 1] = temp;
                 return true;
             }
         }
     }
+    return false;
 }
-bool Right(int a[], int slider, int size)
+bool Right(int tempPuzzle[], int slider, int size)
 {
     if(size==9)
     {
         for (int i = 0; i < 9; i++)
         {
-            if (a[i] == slider)
+            if (tempPuzzle[i] == slider)
             {
                 if (i % 3 == 2)
                     return false;
-                int temp = a[i];
-                a[i] = a[i + 1];
-                a[i + 1] = temp;
+                int temp = tempPuzzle[i];
+                tempPuzzle[i] = tempPuzzle[i + 1];
+                tempPuzzle[i + 1] = temp;
                 return true;
             }
         }
@@ -190,20 +197,21 @@ bool Right(int a[], int slider, int size)
     {
         for (int i = 0; i< 16; i++)
         {
-            if (a[i] == slider)
+            if (tempPuzzle[i] == slider)
             {
                 if (i%4==3)
                     return false;
-                int temp = a[i];
-                a[i] = a[i + 1];
-                a[i + 1] = temp;
+                int temp = tempPuzzle[i];
+                tempPuzzle[i] = tempPuzzle[i + 1];
+                tempPuzzle[i + 1] = temp;
                 return true;
             }
         }
     }
+    return false;
 }
 
-int* initializePuzzle(int a[], int depth, int size)
+int* initializePuzzle(int tempPuzzle[], int depth, int size)
 {
     int count = 0;
     srand((unsigned)time(NULL));
@@ -212,37 +220,37 @@ int* initializePuzzle(int a[], int depth, int size)
         int s=0;
         int seed = rand() % 4;
         if (seed == 0)
-            if (Up(a, s, size) == 1)
+            if (Up(tempPuzzle, s, size) == 1)
             {
                 count++;
             }
         if (seed == 1)
-            if (Down(a, s, size) == 1)
+            if (Down(tempPuzzle, s, size) == 1)
             {
                 count++;
             }
         if (seed == 2)
-            if (Left(a, s, size) == 1)
+            if (Left(tempPuzzle, s, size) == 1)
             {
                 count++;
             }
         if (seed == 3)
-            if (Right(a, s, size) == 1)
+            if (Right(tempPuzzle, s, size) == 1)
             {
                 count++;
             }
     }
-    return a;
+    return tempPuzzle;
 }
 
-void setText(int* a, Ui::MainWindow* ui, int size)
+void setText(int* tempPuzzle, Ui::MainWindow* ui, int size)
 {
     if(size==9)
     {
     QString b[9];
     for(int i=0;i<9;i++)
     {
-        b[i]=QString::number(*(a+i));
+        b[i]=QString::number(*(tempPuzzle+i));
     }
     ui->pushButton->setText(b[0]);
     ui->pushButton_2->setText(b[1]);
@@ -259,7 +267,7 @@ void setText(int* a, Ui::MainWindow* ui, int size)
         QString b[16];
         for(int i=0;i<16;i++)
         {
-            b[i]=QString::number(*(a+i));
+            b[i]=QString::number(*(tempPuzzle+i));
         }
         ui->four_1->setText(b[0]);
         ui->four_2->setText(b[1]);
@@ -391,62 +399,62 @@ void setColor(int* b, Ui::MainWindow* ui, int size)
     }
 }
 
-bool checkComplete(int* a, int size)
+bool checkComplete(int* tempPuzzle, int size)
 {
     for(int i=0;i<size-1;i++)
     {
-        if(*(a+i)!=i+1)
+        if(*(tempPuzzle+i)!=i+1)
             return false;
     }
     return true;
 }
 
-void up(int* a,int dim)
+void up(int* tempPuzzle,int dim)
 {
     int i=0;
-    while(*(a+i)!=0)
+    while(*(tempPuzzle+i)!=0)
         i++;
-    int temp=*(a+i);
-    *(a+i)=*(a+i-dim);
-    *(a+i-dim)=temp;
+    int temp=*(tempPuzzle+i);
+    *(tempPuzzle+i)=*(tempPuzzle+i-dim);
+    *(tempPuzzle+i-dim)=temp;
 }
-void down(int* a,int dim)
+void down(int* tempPuzzle,int dim)
 {
     int i=0;
-    while(*(a+i)!=0)
+    while(*(tempPuzzle+i)!=0)
         i++;
-    int temp=*(a+i);
-    *(a+i)=*(a+i+dim);
-    *(a+i+dim)=temp;
+    int temp=*(tempPuzzle+i);
+    *(tempPuzzle+i)=*(tempPuzzle+i+dim);
+    *(tempPuzzle+i+dim)=temp;
 }
-void left(int* a,int dim)
+void left(int* tempPuzzle,int dim)
 {
     int i=0;
-    while(*(a+i)!=0)
+    while(*(tempPuzzle+i)!=0)
         i++;
-    int temp=*(a+i);
-    *(a+i)=*(a+i-1);
-    *(a+i-1)=temp;
+    int temp=*(tempPuzzle+i);
+    *(tempPuzzle+i)=*(tempPuzzle+i-1);
+    *(tempPuzzle+i-1)=temp;
 }
-void right(int* a,int dim)
+void right(int* tempPuzzle,int dim)
 {
     int i=0;
-    while(*(a+i)!=0)
+    while(*(tempPuzzle+i)!=0)
         i++;
-    int temp=*(a+i);
-    *(a+i)=*(a+i+1);
-    *(a+i+1)=temp;
+    int temp=*(tempPuzzle+i);
+    *(tempPuzzle+i)=*(tempPuzzle+i+1);
+    *(tempPuzzle+i+1)=temp;
 }
 
-void showStep(int* a,int step, int& i, int dim)
+void showStep(int* tempPuzzle,int step, int& i, int dim)
 {
      if(step==1)
-         up(a,dim);
+         up(tempPuzzle,dim);
      if(step==2)
-         down(a,dim);
+         down(tempPuzzle,dim);
      if(step==3)
-         left(a,dim);
+         left(tempPuzzle,dim);
      if(step==4)
-         right(a,dim);
+         right(tempPuzzle,dim);
      i++;
 }

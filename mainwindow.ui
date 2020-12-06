@@ -236,10 +236,10 @@
    <widget class="QPushButton" name="pushButton_14">
     <property name="geometry">
      <rect>
-      <x>980</x>
-      <y>80</y>
-      <width>100</width>
-      <height>75</height>
+      <x>990</x>
+      <y>110</y>
+      <width>111</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -339,17 +339,19 @@
    <widget class="QPushButton" name="reset">
     <property name="geometry">
      <rect>
-      <x>1100</x>
-      <y>105</y>
-      <width>50</width>
-      <height>50</height>
+      <x>990</x>
+      <y>110</y>
+      <width>111</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <weight>75</weight>
-      <bold>true</bold>
-      <underline>true</underline>
+      <family>Arial</family>
+      <pointsize>20</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+      <underline>false</underline>
      </font>
     </property>
     <property name="text">
@@ -645,11 +647,11 @@
       <pointsize>15</pointsize>
       <weight>75</weight>
       <bold>true</bold>
-      <underline>true</underline>
+      <underline>false</underline>
      </font>
     </property>
     <property name="text">
-     <string>Retry</string>
+     <string>Restart</string>
     </property>
    </widget>
    <zorder>label_6</zorder>

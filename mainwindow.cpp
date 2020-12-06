@@ -10,8 +10,8 @@
 using namespace std;
 
 int autoSpeed=1000;
-int* a = new int [9];
-int* b= new int [16];
+static int* s_9_puzzle = new int [9];
+static int* s_16_puzzle= new int [16];
 int stepCount=0;
 int paused=-1;
 int dimension;
@@ -81,16 +81,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_9->setStyleSheet("background-color:rgb(0,0,0)");
     QFont fontS("MS Shell Dlg",25,20);
     ui->pushButton_14->setFont(fontS);
+    ui->reset->setFont(fontS);
+    ui->horizontalSlider->setValue(66);
     for(int i=0;i<9;i++)
     {
-        *(a+i)=i+1;
+        *(s_9_puzzle+i)=i+1;
     }
-    *(a+8)=0;
+    *(s_9_puzzle+8)=0;
     for(int i=0;i<16;i++)
     {
-        *(b+i)=i+1;
+        *(s_16_puzzle+i)=i+1;
     }
-    *(b+15)=0;
+    *(s_16_puzzle+15)=0;
     ui->label_6->setPixmap(QPixmap::fromImage(BCImage));
     ui->pushButton_10->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->restart_2->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
@@ -118,12 +120,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_10_clicked()
+void MainWindow::on_pushButton_10_clicked() // 3 x 3 button
 {
     dimension = 3;
-    a=initializePuzzle(a,100000,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    s_9_puzzle=initializePuzzle(s_9_puzzle,100000,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
     ui->pushButton->setVisible(true);
     ui->pushButton_2->setVisible(true);
     ui->pushButton_3->setVisible(true);
@@ -140,66 +142,66 @@ void MainWindow::on_pushButton_10_clicked()
 
 void MainWindow::on_pushButton_clicked()
 {
-    operate(a,0,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    operate(s_9_puzzle,0,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    operate(a,1,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    operate(s_9_puzzle,1,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    operate(a,2,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    operate(s_9_puzzle,2,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
 }
 
 void MainWindow::on_pushButton_4_clicked()
 {
-    operate(a,3,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    operate(s_9_puzzle,3,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
 }
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    operate(a,4,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    operate(s_9_puzzle,4,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
 }
 
 void MainWindow::on_pushButton_6_clicked()
 {
-    operate(a,5,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    operate(s_9_puzzle,5,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
 }
 
 void MainWindow::on_pushButton_7_clicked()
 {
-    operate(a,6,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    operate(s_9_puzzle,6,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
 }
 
 void MainWindow::on_pushButton_8_clicked()
 {
-    operate(a,7,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
+    operate(s_9_puzzle,7,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
 }
 
 void MainWindow::on_pushButton_9_clicked()
 {
-    operate(a,8,9);
-    setText(a,ui,9);
-    setColor(a,ui,9);
-    if(checkComplete(a, 9))
+    operate(s_9_puzzle,8,9);
+    setText(s_9_puzzle,ui,9);
+    setColor(s_9_puzzle,ui,9);
+    if(checkComplete(s_9_puzzle, 9))
     {
         repaint();
         Sleep(1000);
@@ -222,6 +224,9 @@ void MainWindow::on_pushButton_11_clicked()
     ui->pushButton_11->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_12->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_13->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    ui->pushButton_15->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    ui->restart_2->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    ui->reset->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->label_2->setStyleSheet("color:rgb(255,255,255)");
     ui->label_3->setStyleSheet("color:rgb(255,255,255)");
     ui->label_4->setStyleSheet("color:rgb(255,255,255)");
@@ -236,6 +241,9 @@ void MainWindow::on_pushButton_12_clicked()
     ui->pushButton_11->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->pushButton_12->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->pushButton_13->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
+    ui->pushButton_15->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
+    ui->restart_2->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
+    ui->reset->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->label_2->setStyleSheet("color:rgb(255,255,255)");
     ui->label_3->setStyleSheet("color:rgb(255,255,255)");
     ui->label_4->setStyleSheet("color:rgb(255,255,255)");
@@ -256,6 +264,9 @@ void MainWindow::on_pushButton_13_clicked()
     ui->pushButton_11->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->pushButton_12->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->pushButton_13->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    ui->pushButton_15->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    ui->restart_2->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    ui->reset->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->label_2->setStyleSheet("color:rgb(255,180,241)");
     ui->label_3->setStyleSheet("color:rgb(255,180,241)");
     ui->label_4->setStyleSheet("color:rgb(255,180,241)");
@@ -263,29 +274,25 @@ void MainWindow::on_pushButton_13_clicked()
 }
 
 
-void MainWindow::on_pushButton_14_toggled(bool checked)
+void MainWindow::on_pushButton_14_toggled(bool checked) // Auto button
 {
     int i=0;
     int stepsNeeded;
     if(checked)
         paused++;
-    //auto reply = QMessageBox::question(this, "Save", "Do you want to save your changes?",
-    //    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     if(paused == 0 && dimension == 3)
     {
-        steps = entry(a, dimension, stepsNeeded);
+        steps = entry(s_9_puzzle, dimension, stepsNeeded);
     }
     if(paused == 0 && dimension == 4)
     {
-        steps = entry(b, dimension, stepsNeeded);
+        steps = entry(s_16_puzzle, dimension, stepsNeeded);
     }
-    //auto reply_1 = QMessageBox::question(this, "Save", "Do you want to save your changes?",
-    //    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     if(dimension==3)
     {
         while(checked && paused==0)
         {
-            if(checkComplete(a,dimension*dimension))
+            if(checkComplete(s_9_puzzle,dimension*dimension))
             {
 
                 Sleep(1000);
@@ -298,9 +305,9 @@ void MainWindow::on_pushButton_14_toggled(bool checked)
             QApplication::processEvents();
             QString stepCountNum=QString::number(i);
             ui->pushButton_14->setText(stepCountNum);
-            showStep(a, *(steps+stepCount), stepCount, dimension);
-            setText(a,ui,dimension*dimension);
-            setColor(a,ui,dimension*dimension);
+            showStep(s_9_puzzle, *(steps+stepCount), stepCount, dimension);
+            setText(s_9_puzzle,ui,dimension*dimension);
+            setColor(s_9_puzzle,ui,dimension*dimension);
             ui->pushButton->repaint();
             ui->pushButton_2->repaint();
             ui->pushButton_3->repaint();
@@ -319,7 +326,7 @@ void MainWindow::on_pushButton_14_toggled(bool checked)
     {
         while(checked && paused==0)
         {
-            if(checkComplete(b,dimension*dimension))
+            if(checkComplete(s_16_puzzle,dimension*dimension))
             {
 
                 Sleep(1000);
@@ -332,34 +339,34 @@ void MainWindow::on_pushButton_14_toggled(bool checked)
             QApplication::processEvents();
             QString stepCountNum=QString::number(i);
             ui->pushButton_14->setText(stepCountNum);
-            showStep(b, *(steps+stepCount), stepCount, dimension);
-            setText(b,ui,dimension*dimension);
-            setColor(b,ui,dimension*dimension);
+            showStep(s_16_puzzle, *(steps+stepCount), stepCount, dimension);
+            setText(s_16_puzzle,ui,dimension*dimension);
+            setColor(s_16_puzzle,ui,dimension*dimension);
             ui->centralwidget->repaint();
             Sleep(autoSpeed);
             i++;
         }
     }
-    if(!checkComplete(a,dimension*dimension)&&dimension==3)
+    if(!checkComplete(s_9_puzzle,dimension*dimension)&&dimension==3)
     {
         paused++;
         ui->reset->setVisible(true);
         repaint();
     }
-    if(checkComplete(a,dimension*dimension)&&dimension==3)
+    if(checkComplete(s_9_puzzle,dimension*dimension)&&dimension==3)
     {
         ui->restart->setVisible(true);
         ui->restart->raise();
         ui->close->setVisible(true);
         ui->close->raise();
     }
-    if(!checkComplete(b,dimension*dimension)&&dimension==4)
+    if(!checkComplete(s_16_puzzle,dimension*dimension)&&dimension==4)
     {
         paused++;
         ui->reset->setVisible(true);
         repaint();
     }
-    if(checkComplete(b,dimension*dimension)&&dimension==4)
+    if(checkComplete(s_16_puzzle,dimension*dimension)&&dimension==4)
     {
         ui->restart->setVisible(true);
         ui->restart->raise();
@@ -406,115 +413,115 @@ void MainWindow::on_restart_clicked()
 
 void MainWindow::on_four_1_clicked()
 {
-    operate(b,0,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,0,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_2_clicked()
 {
-    operate(b,1,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,1,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_3_clicked()
 {
-    operate(b,2,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,2,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_4_clicked()
 {
-    operate(b,3,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,3,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_5_clicked()
 {
-    operate(b,4,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,4,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_6_clicked()
 {
-    operate(b,5,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,5,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_7_clicked()
 {
-    operate(b,6,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,6,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_8_clicked()
 {
-    operate(b,7,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,7,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_9_clicked()
 {
-    operate(b,8,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,8,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_10_clicked()
 {
-    operate(b,9,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,9,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_11_clicked()
 {
-    operate(b,10,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,10,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_12_clicked()
 {
-    operate(b,11,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,11,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_13_clicked()
 {
-    operate(b,12,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,12,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_14_clicked()
 {
-    operate(b,13,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,13,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_15_clicked()
 {
-    operate(b,14,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    operate(s_16_puzzle,14,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
 }
 
 void MainWindow::on_four_16_clicked()
 {
-    operate(b,15,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
-    if(checkComplete(b, 16))
+    operate(s_16_puzzle,15,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
+    if(checkComplete(s_16_puzzle, 16))
     {
         cout<<"done"<<endl;
         repaint();
@@ -533,9 +540,9 @@ void MainWindow::on_four_16_clicked()
 void MainWindow::on_pushButton_15_clicked()
 {
     dimension = 4;
-    b=initializePuzzle(b,100000,16);
-    setText(b,ui,16);
-    setColor(b,ui,16);
+    s_16_puzzle=initializePuzzle(s_16_puzzle,100000,16);
+    setText(s_16_puzzle,ui,16);
+    setColor(s_16_puzzle,ui,16);
     ui->four_1->setVisible(true);
     ui->four_2->setVisible(true);
     ui->four_3->setVisible(true);
