@@ -6,6 +6,10 @@
 #include <assert.h>
 #include "utilities.h"
 
+#ifdef SPDLOG
+#include "spdlog/sinks/stdout_color_sinks.h"
+#endif
+
 using namespace std;
 
 #ifndef SPDLOG
@@ -13,9 +17,16 @@ static streambuf* s_recordedBuf = nullptr;
 static ofstream s_out;
 #endif
 
+static bool s_initialized = false;
+
 void utilitiesInitialize(char const * fp) {
-    assert(fp != nullptr);
+    if (fp == nullptr)
+        s_initialized = false;
+    else
+        s_initialized = true;
 #ifndef SPDLOG
+    if (!s_initialized)
+        return;
     // save cout buffer
     s_out.open(fp);
     if (s_recordedBuf == nullptr) {
@@ -23,13 +34,21 @@ void utilitiesInitialize(char const * fp) {
     }
     cout.rdbuf(s_out.rdbuf());
 #else
-    spdlog::basic_logger_mt(LOGNAME, fp);
-    spdlog::get(LOGNAME)->info("Initialized ... ");
-    spdlog::get(LOGNAME)->flush();
+    if (!s_initialized) {
+        auto console = spdlog::stdout_color_mt(LOGNAME);
+    }
+    else {
+        spdlog::basic_logger_mt(LOGNAME, fp);
+        spdlog::get(LOGNAME)->info("Initialized ... ");
+        spdlog::get(LOGNAME)->flush();
+    }
 #endif
 }
 
 void utilitiesUninitializePrint() {
+    if (!s_initialized)
+        return;
+    s_initialized = false;
 #ifndef SPDLOG
     s_out.close();
     if (s_recordedBuf != nullptr) {
@@ -42,6 +61,8 @@ void utilitiesUninitializePrint() {
 }
 
 void printPuzzle(int* tempPuzzle, int dim) {
+    if (!s_initialized)
+        return;
 #ifndef SPDLOG
     cout << "\npuzzle: " << endl;
     for (int i = 0; i < dim; i++) {
