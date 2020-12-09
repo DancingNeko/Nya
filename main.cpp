@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include<QFrame>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
