@@ -2,14 +2,25 @@
 
 #include <QApplication>
 #include<QFrame>
-#include <iostream>
+
+#include "utilities.h"
+
+using namespace std;
 
 int main(int argc, char *argv[])
 {
+    // save cout buffer
+    utilitiesInitialize("temp.log");
+
     QApplication a(argc, argv);
     MainWindow w;
     w.resize(1280,720);
     w.setWindowTitle("Tile Puzzle");
     w.show();
-    return a.exec();
+    auto res = a.exec();
+
+    // restore cout old buffer
+    utilitiesUninitializePrint();
+
+    return res;
 }
