@@ -1,4 +1,5 @@
 #include<iostream>
+#include "utilities.h"
 using namespace std;
 
 struct step
@@ -22,16 +23,6 @@ bool checkComplete(int tempPuzzle[]);
 step* recordStep(int dir, step* add);
 step* head = new step;
 step* add = head;
-
-void printPuzzle(int* tempPuzzle, int dim) {
-    cout << "\npuzzle: " << endl;
-    for (int i = 0; i < dim; i++) {
-        for (int j = 0; j < dim; j++) {
-            cout << tempPuzzle[i * dim + j]<<", ";
-        }
-        cout << endl;
-    }
-}
 
 bool check_repeat(int* tempPuzzle)
 {

@@ -3,6 +3,7 @@
 #include<QPushButton>
 
 #include <QMainWindow>
+#include <QFont>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -89,9 +90,46 @@ private slots:
 
     void on_restart_2_clicked();
 
+    void automate_callback();
+	void on_penta_puzzle_clicked();
+	void on_penta_puzzle_trigger_clicked();
 
 private:
+    void setPentaPuzzleTriggerButtonVisibility(bool vis);
+    void setPentaPuzzleVisibility(bool visible);
+    void setPentaPuzzleTriggerButtonFontAndStyle(QFont font, const char * style=nullptr);
+    void setPentaPuzzleFontAndStyle(QFont font, const char * style=nullptr);
+    void createPentaPuzzleTriggerButton();
+    void createPentaPuzzle();
+    void connectPentaPuzzleTriggerButton();
+    void connectPentaPuzzle();
+
+    void setPentaPuzzleText(const int * puzzle = nullptr);
+
+private:
+    // AutoState: 
+    //          click             click
+    // kInitial-------> kRunning -------> kPaused
+    //   /|\               |                 |
+    //    |    completed   |                 |
+    //    |----------------|      click      |
+    //    |----------------------------------|
+    enum AutoState{
+        kInitial = -1,
+        kRunning = 0,
+        kPaused = 1,
+    };
+    void switchAutoState();
+    void toBeRunning();
+    void toBePaused();
+    void toBeInitial();
+
+    enum {PENTA = 5};
+    QPushButton * pentaPushButton[PENTA*PENTA] = {0};
+    QPushButton * pentaPuzzleTriggerButton = nullptr;
+
     Ui::MainWindow *ui;
+    AutoState paused_;
 };
 
 #endif // MAINWINDOW_H

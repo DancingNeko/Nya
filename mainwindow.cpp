@@ -7,13 +7,15 @@
 #include<QtCore>
 #include<QWidget>
 #include <QMessageBox>
+#include <QTimer>
+#include "utilities.h"
+#include <assert.h>
 using namespace std;
 
 int autoSpeed=1000;
 static int* s_9_puzzle = new int [9];
 static int* s_16_puzzle= new int [16];
 int stepCount=0;
-int paused=-1;
 int dimension;
 QImage BCImage1(QString(":/frame1.png"));
 QImage BCImage2(QString(":/frame2.png"));
@@ -25,6 +27,7 @@ int* steps;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , paused_(AutoState::kInitial)
 {
     ui->setupUi(this);
     ui->pushButton->setVisible(false);
@@ -113,12 +116,105 @@ MainWindow::MainWindow(QWidget *parent)
     ui->reset->setVisible(false);
     ui->restart->setVisible(false);
     ui->close->setVisible(false);
+
+    QFont fontTriggerButton;
+    fontTriggerButton.setFamily(QString::fromUtf8("Arial Black"));
+    fontTriggerButton.setPointSize(30);
+    fontTriggerButton.setBold(true);
+    fontTriggerButton.setUnderline(true);
+    fontTriggerButton.setWeight(75);
+    createPentaPuzzle();
+    createPentaPuzzleTriggerButton();
+    setPentaPuzzleVisibility(false);
+    setPentaPuzzleTriggerButtonVisibility(true);
+    setPentaPuzzleFontAndStyle(font);
+    setPentaPuzzleTriggerButtonFontAndStyle(fontTriggerButton, "background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    connectPentaPuzzleTriggerButton();
+    connectPentaPuzzle();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::createPentaPuzzle() {
+    assert(pentaPushButton[0] == nullptr);
+    for (int i = 0; i < PENTA; i++) {
+        for (int j = 0; j < PENTA; j++) {
+            int index = i * PENTA + j;
+            pentaPushButton[index] = new QPushButton(ui->centralwidget);
+            pentaPushButton[index]->setGeometry(QRect(390 + j*100, 110 + i*100, 100, 100 ));
+            pentaPushButton[index]->setObjectName(QString("pentaButton_%1").arg(index));
+        }
+    }
+    setPentaPuzzleText();
+}
+
+void MainWindow::setPentaPuzzleText(const int * puzzle) {
+    static int default_puzzle[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                                   16, 17, 18, 19, 20, 21, 22, 23, 24, 0};
+    if (puzzle == nullptr) {
+        puzzle = default_puzzle;
+    }
+    for (int i = 0; i < PENTA * PENTA; i++) {
+        pentaPushButton[i]->setText(QString::number(puzzle[i]));
+    }
+}
+
+void MainWindow::createPentaPuzzleTriggerButton() {
+    assert(pentaPuzzleTriggerButton == nullptr);
+    this->pentaPuzzleTriggerButton = new QPushButton(ui->centralwidget);
+    pentaPuzzleTriggerButton->setObjectName("pentaPuzzleTriggerButton");
+    pentaPuzzleTriggerButton->setGeometry(QRect(515, 450, 250, 100));
+    pentaPuzzleTriggerButton->setText(QString("5 x 5"));
+}
+
+void MainWindow::setPentaPuzzleTriggerButtonVisibility(bool vis) {
+    pentaPuzzleTriggerButton->setVisible(vis);
+    if (vis) {
+        pentaPuzzleTriggerButton->raise();
+    }
+}
+void MainWindow::setPentaPuzzleVisibility(bool vis) {
+    for (int i = 0; i < PENTA * PENTA; i++) {
+        assert(pentaPushButton[i] != nullptr);
+        pentaPushButton[i]->setVisible(vis);
+        if (vis) {
+            pentaPushButton[i]->raise();
+        }
+    }
+}
+
+void MainWindow::setPentaPuzzleTriggerButtonFontAndStyle(QFont font, const char *style) {
+    assert(pentaPuzzleTriggerButton != nullptr);
+    pentaPuzzleTriggerButton->setFont(font);
+    if (style == nullptr)
+        return;
+    pentaPuzzleTriggerButton->setStyleSheet(style);
+}
+void MainWindow::setPentaPuzzleFontAndStyle(QFont font, const char * style) {
+    for (int i = 0; i < PENTA * PENTA; i++) {
+        assert(pentaPushButton[i] != nullptr);
+        pentaPushButton[i]->setFont(font);
+    }
+    if (style == nullptr)
+        return;
+    for (int i = 0; i < PENTA * PENTA; i++) {
+        assert(pentaPushButton[i] != nullptr);
+        pentaPushButton[i]->setStyleSheet(style);
+    }
+}
+void MainWindow::connectPentaPuzzleTriggerButton() {
+    assert(pentaPuzzleTriggerButton != nullptr);
+    auto res = connect(pentaPuzzleTriggerButton, SIGNAL(clicked()), this, SLOT(on_penta_puzzle_trigger_clicked()));
+}
+void MainWindow::connectPentaPuzzle() {
+    for (int i = 0; i < PENTA*PENTA; i++) {
+        auto res = connect(pentaPushButton[i], SIGNAL(clicked()), this, SLOT(on_penta_puzzle_clicked()));
+    }
+}
+
 
 void MainWindow::on_pushButton_10_clicked() // 3 x 3 button
 {
@@ -138,6 +234,8 @@ void MainWindow::on_pushButton_10_clicked() // 3 x 3 button
     ui->pushButton_10->setVisible(true);
     ui->pushButton_10->setVisible(false);
     ui->pushButton_15->setVisible(false);
+    setPentaPuzzleTriggerButtonVisibility(false);
+    setPentaPuzzleVisibility(false);
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -273,105 +371,46 @@ void MainWindow::on_pushButton_13_clicked()
     ui->label_5->setStyleSheet("color:rgb(255,180,241)");
 }
 
+void MainWindow::automate_callback() {
+    int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
+    if (paused_ != kRunning) {
+        return;
+    }
+    if (checkComplete(puzzle, dimension * dimension)) {
+        // auto-play completed
+        switchAutoState();
+        return;
+    }
+    
+    QString stepCountNum = QString::number(stepCount);
+    ui->pushButton_14->setText(stepCountNum);
+    LOGINFO("automate_callback begin ... ");
+    printPuzzle(puzzle, dimension);
+    LOGINFO("stepCount: {}", stepCount);
+    LOGINFO("automate_callback end ... ");
+    showStep(puzzle, steps[stepCount], stepCount, dimension);
+    setText(puzzle, ui, dimension * dimension);
+    setColor(puzzle, ui, dimension * dimension);
+    ui->centralwidget->repaint();
+    QTimer::singleShot(autoSpeed, this, &MainWindow::automate_callback);
+}
 
 void MainWindow::on_pushButton_14_toggled(bool checked) // Auto button
 {
-    int i=0;
+    if (dimension == 0) {
+        return;
+    }
     int stepsNeeded;
-    if(checked)
-        paused++;
-    if(paused == 0 && dimension == 3)
+    switchAutoState();
+    int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
+    if(paused_ == kRunning)
     {
-        steps = entry(s_9_puzzle, dimension, stepsNeeded);
-    }
-    if(paused == 0 && dimension == 4)
-    {
-        steps = entry(s_16_puzzle, dimension, stepsNeeded);
-    }
-    if(dimension==3)
-    {
-        while(checked && paused==0)
-        {
-            if(checkComplete(s_9_puzzle,dimension*dimension))
-            {
-
-                Sleep(1000);
-                ui->label->setVisible(true);
-                ui->label->raise();
-                repaint();
-                Sleep(1000);
-                break;
-            }
-            QApplication::processEvents();
-            QString stepCountNum=QString::number(i);
-            ui->pushButton_14->setText(stepCountNum);
-            showStep(s_9_puzzle, *(steps+stepCount), stepCount, dimension);
-            setText(s_9_puzzle,ui,dimension*dimension);
-            setColor(s_9_puzzle,ui,dimension*dimension);
-            ui->pushButton->repaint();
-            ui->pushButton_2->repaint();
-            ui->pushButton_3->repaint();
-            ui->pushButton_4->repaint();
-            ui->pushButton_5->repaint();
-            ui->pushButton_6->repaint();
-            ui->pushButton_7->repaint();
-            ui->pushButton_8->repaint();
-            ui->pushButton_9->repaint();
-            Sleep(autoSpeed);
-            repaint();
-            i++;
-        }
-    }
-    if(dimension==4)
-    {
-        while(checked && paused==0)
-        {
-            if(checkComplete(s_16_puzzle,dimension*dimension))
-            {
-
-                Sleep(1000);
-                ui->label->setVisible(true);
-                ui->label->raise();
-                repaint();
-                Sleep(1000);
-                break;
-            }
-            QApplication::processEvents();
-            QString stepCountNum=QString::number(i);
-            ui->pushButton_14->setText(stepCountNum);
-            showStep(s_16_puzzle, *(steps+stepCount), stepCount, dimension);
-            setText(s_16_puzzle,ui,dimension*dimension);
-            setColor(s_16_puzzle,ui,dimension*dimension);
-            ui->centralwidget->repaint();
-            Sleep(autoSpeed);
-            i++;
-        }
-    }
-    if(!checkComplete(s_9_puzzle,dimension*dimension)&&dimension==3)
-    {
-        paused++;
-        ui->reset->setVisible(true);
-        repaint();
-    }
-    if(checkComplete(s_9_puzzle,dimension*dimension)&&dimension==3)
-    {
-        ui->restart->setVisible(true);
-        ui->restart->raise();
-        ui->close->setVisible(true);
-        ui->close->raise();
-    }
-    if(!checkComplete(s_16_puzzle,dimension*dimension)&&dimension==4)
-    {
-        paused++;
-        ui->reset->setVisible(true);
-        repaint();
-    }
-    if(checkComplete(s_16_puzzle,dimension*dimension)&&dimension==4)
-    {
-        ui->restart->setVisible(true);
-        ui->restart->raise();
-        ui->close->setVisible(true);
-        ui->close->raise();
+        LOGINFO("on_14_toggled begin ...");
+        steps = entry(puzzle, dimension, stepsNeeded);
+        stepCount = 0;
+        printPuzzle(puzzle, dimension);
+        LOGINFO("on_14_toggled end ...");
+        QTimer::singleShot(autoSpeed, this, &MainWindow::automate_callback);
     }
 }
 
@@ -394,10 +433,9 @@ void MainWindow::on_reset_clicked()
 {
     delete[] steps;
     steps=NULL;
-    paused=-1;
     stepCount=0;
-    ui->pushButton_14->setText("Auto");
-    ui->reset->setVisible(false);
+
+    switchAutoState();
 }
 
 void MainWindow::on_close_clicked()
@@ -566,6 +604,8 @@ void MainWindow::on_pushButton_15_clicked()
     ui->label_4->setVisible(true);
     ui->label_5->setVisible(true);
     ui->horizontalSlider->setVisible(true);
+    setPentaPuzzleTriggerButtonVisibility(false);
+    setPentaPuzzleVisibility(false);
 }
 
 
@@ -573,4 +613,90 @@ void MainWindow::on_restart_2_clicked()
 {
     QCoreApplication::exit(0);
     QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+}
+
+void MainWindow::switchAutoState() {
+    
+    switch (paused_) {
+    case kInitial:
+        paused_ = kRunning;
+        toBeRunning();
+        break;
+    case kRunning:
+    {
+        int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
+        if (checkComplete(puzzle, dimension * dimension)) {
+            paused_ = kInitial;
+            toBeInitial();
+        }
+        else {
+            paused_ = kPaused;
+            toBePaused();
+        }
+    }
+        break;
+    case kPaused:
+        paused_ = kInitial;
+        toBeInitial();
+        break;
+    default:
+        assert(!"Unknown Auto State.");
+        break;
+    }
+}
+
+void MainWindow::toBeRunning() {
+    // do nothing
+}
+
+void MainWindow::toBePaused() {
+    // display reset button and hide auto button
+    ui->reset->setVisible(true);
+    ui->pushButton_14->setVisible(false);
+}
+
+void MainWindow::toBeInitial() {
+    // display auto button and hide reset button
+    ui->reset->setVisible(false);
+    ui->pushButton_14->setText("Auto");
+    ui->pushButton_14->setVisible(true);
+
+    int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
+    if (checkComplete(puzzle, dimension * dimension)) {
+        ui->label->setVisible(true);
+        ui->label->raise();
+        ui->restart->setVisible(true);
+        ui->restart->raise();
+        ui->close->setVisible(true);
+        ui->close->raise();
+    }
+    else {
+        ui->restart->setVisible(false);
+        ui->close->setVisible(false);
+    }
+}
+
+void MainWindow::on_penta_puzzle_trigger_clicked() {
+    setPentaPuzzleVisibility(true);
+    ui->pushButton_10->setVisible(false);
+    ui->pushButton_15->setVisible(false);
+    this->pentaPuzzleTriggerButton->setVisible(false);
+    ui->label_3->setVisible(true);
+    ui->label_4->setVisible(true);
+    ui->label_5->setVisible(true);
+    ui->horizontalSlider->setVisible(true);
+}
+
+static int getPuzzleButtonIndex(QPushButton *puzzle[], QPushButton * btn, int size) {
+    for (int i = 0; i < size; i++) {
+        if (puzzle[i] == btn)
+            return i;
+    }
+    return -1;
+}
+
+void MainWindow::on_penta_puzzle_clicked() {
+    auto sender = qobject_cast<QPushButton*>(QObject::sender());
+    int ix = getPuzzleButtonIndex(pentaPushButton, sender, PENTA*PENTA);
+    assert(ix >= 0);
 }
