@@ -5,3 +5,4 @@ frame2.png filter=lfs diff=lfs merge=lfs -text
 frame3.png filter=lfs diff=lfs merge=lfs -text
 frame4.png filter=lfs diff=lfs merge=lfs -text
 Logo.ico filter=lfs diff=lfs merge=lfs -text
+*.lib filter=lfs diff=lfs merge=lfs -text
