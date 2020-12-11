@@ -12,5 +12,5 @@ void moveSlide(int* a, int n, int slider);
 int operate(int* a, int move, int size);
 void setColor(int* a,Ui::MainWindow* ui, int size);
 void setText(int* a, Ui::MainWindow* ui, int size);
-int* entry(int puzzle[], int dimension, int& stepsNeeded);
+
 #endif // PLAY_H

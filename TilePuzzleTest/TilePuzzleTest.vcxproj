@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../includes;../</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../includes</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../includes;../</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,7 +144,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source1.cpp" />
+    <ClCompile Include="..\utilities.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="test_convertPuzzle.cpp" />
+    <ClCompile Include="test_entry.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source1.h" />
+    <ClInclude Include="..\utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

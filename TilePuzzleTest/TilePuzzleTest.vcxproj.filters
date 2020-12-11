@@ -13,10 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="target">
+      <UniqueIdentifier>{4d989d47-ce58-4b3d-b88d-b855df6ba6ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_entry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_convertPuzzle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source1.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utilities.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source1.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\utilities.h">
+      <Filter>target</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
