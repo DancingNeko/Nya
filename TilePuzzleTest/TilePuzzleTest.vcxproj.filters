@@ -33,6 +33,12 @@
     <ClCompile Include="..\utilities.cpp">
       <Filter>target</Filter>
     </ClCompile>
+    <ClCompile Include="test_LLEdgeProcessing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_castPuzzle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source1.h">

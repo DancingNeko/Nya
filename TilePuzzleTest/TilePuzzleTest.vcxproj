@@ -147,8 +147,10 @@
     <ClCompile Include="..\Source1.cpp" />
     <ClCompile Include="..\utilities.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="test_castPuzzle.cpp" />
     <ClCompile Include="test_convertPuzzle.cpp" />
     <ClCompile Include="test_entry.cpp" />
+    <ClCompile Include="test_LLEdgeProcessing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source1.h" />
