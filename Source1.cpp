@@ -39,6 +39,7 @@ bool check_repeat(int* tempPuzzle)
 int* deleteBlanks(int steps[], int& stepCount)
 {
     int* stepsSimplified = new int[stepCount];
+    memset((char*)stepsSimplified, 0xcd, sizeof(int)*stepCount);
     int j = 0;
     int i = 0;
     while (steps[i] == 1 || steps[i] == 2 || steps[i] == 3 || steps[i] == 4 || steps[i] == -1)
