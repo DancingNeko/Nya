@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include"play.h"
+#include "Source1.h"
 #include<iostream>
 #include<QProcess>
 #include<windows.h>
