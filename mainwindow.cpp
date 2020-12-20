@@ -96,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent)
         *(s_16_puzzle+i)=i+1;
     }
     *(s_16_puzzle+15)=0;
-    ui->label_6->setPixmap(QPixmap::fromImage(BCImage));
+    ui->label_6->setStyleSheet("background-image: url(:/frame1.png);");
     ui->pushButton_10->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->restart_2->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_14->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
@@ -111,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->label_3->setStyleSheet("color:rgb(255,255,255)");
     ui->label_4->setStyleSheet("color:rgb(255,255,255)");
     ui->label_5->setStyleSheet("color:rgb(255,255,255)");
-    ui->label->setPixmap(QPixmap::fromImage(BCImage4));
+    ui->label->setStyleSheet("background-image: url(:/animeCongrats.png);");
     ui->label->setVisible(false);
     ui->reset->setVisible(false);
     ui->restart->setVisible(false);
@@ -316,13 +316,14 @@ void MainWindow::on_pushButton_9_clicked()
 
 void MainWindow::on_pushButton_11_clicked()
 {
-    ui->label_6->setPixmap(QPixmap::fromImage(BCImage));
+    ui->label_6->setStyleSheet("background-image: url(:/frame.png);");
     ui->pushButton_10->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_14->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_11->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_12->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_13->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_15->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
+    this->pentaPuzzleTriggerButton->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->restart_2->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->reset->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->label_2->setStyleSheet("color:rgb(255,255,255)");
@@ -333,19 +334,20 @@ void MainWindow::on_pushButton_11_clicked()
 
 void MainWindow::on_pushButton_12_clicked()
 {
-    ui->label_6->setPixmap(QPixmap::fromImage(BCImage1));
     ui->pushButton_10->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->pushButton_14->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->pushButton_11->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->pushButton_12->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->pushButton_13->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->pushButton_15->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
+    this->pentaPuzzleTriggerButton->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->restart_2->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->reset->setStyleSheet("background-color:rgb(65,187,105); color:rgb(255,255,255)");
     ui->label_2->setStyleSheet("color:rgb(255,255,255)");
     ui->label_3->setStyleSheet("color:rgb(255,255,255)");
     ui->label_4->setStyleSheet("color:rgb(255,255,255)");
     ui->label_5->setStyleSheet("color:rgb(255,255,255)");
+    ui->label_6->setStyleSheet("background-image: url(:/frame1.png);");
 }
 
 int Switch=0;
@@ -353,9 +355,9 @@ void MainWindow::on_pushButton_13_clicked()
 {
     Switch++;
     if(Switch%2==1)
-    ui->label_6->setPixmap(QPixmap::fromImage(BCImage2));
+        ui->label_6->setStyleSheet("background-image: url(:/frame2.png);");
     if(Switch%2==0)
-    ui->label_6->setPixmap(QPixmap::fromImage(BCImage3));
+        ui->label_6->setStyleSheet("background-image: url(:/frame3.png);");
     repaint();
     ui->pushButton_10->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->pushButton_14->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
@@ -363,6 +365,7 @@ void MainWindow::on_pushButton_13_clicked()
     ui->pushButton_12->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->pushButton_13->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->pushButton_15->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
+    this->pentaPuzzleTriggerButton->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->restart_2->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->reset->setStyleSheet("background-color:rgb(43,45,122); color:rgb(255,180,241)");
     ui->label_2->setStyleSheet("color:rgb(255,180,241)");
