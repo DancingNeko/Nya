@@ -1,0 +1,2 @@
+gtest.lib filter=lfs diff=lfs merge=lfs -text
+gtestd.lib filter=lfs diff=lfs merge=lfs -text

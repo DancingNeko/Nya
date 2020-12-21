@@ -18,6 +18,7 @@ SOURCES += \
     utilities.cpp
 
 HEADERS += \
+    Source1.h \
     mainwindow.h \
     play.h \
     utilities.h

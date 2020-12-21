@@ -1,5 +1,6 @@
 #include<iostream>
 #include "utilities.h"
+#include "Source1.h"
 using namespace std;
 
 struct step
@@ -8,7 +9,7 @@ struct step
     step* next;
 };
 int originalDimension;
-void castPuzzle(int tempPuzzle[], int target, int dim);
+
 void moveSliderBR(int tempPuzzle[], int dim, int target, int& sliderLoc);
 void moveTargetRight(int tempPuzzle[], int& slider, int targetLoc, int w, int h);
 int checkLocation(int tempPuzzle[], int target, int size);
@@ -18,7 +19,6 @@ bool moveSlider(int tempPuzzle[], int& slider, int dir, int w, int h);
 void UREdgeProcessing(int tempPuzzle[], int target, int dim);
 void moveTargetDown(int tempPuzzle[], int& sliderLoc, int targetLoc, int w, int h);
 void twoXtwoSolving(int tempPuzzle[]);
-int* convertPuzzle(int tempPuzzle[], int dim);
 bool checkComplete(int tempPuzzle[]);
 step* recordStep(int dir, step* add);
 step* head = new step;
