@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent)
         *(s_16_puzzle+i)=i+1;
     }
     *(s_16_puzzle+15)=0;
-    ui->label_6->setStyleSheet("background-image: url(:/frame1.png);");
+    ui->label_6->setStyleSheet("background-image: url(:/frame.png);");
     ui->pushButton_10->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->restart_2->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->pushButton_14->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
@@ -388,10 +388,6 @@ void MainWindow::automate_callback() {
     
     QString stepCountNum = QString::number(stepCount);
     ui->pushButton_14->setText(stepCountNum);
-    LOGINFO("automate_callback begin ... ");
-    printPuzzle(puzzle, dimension);
-    LOGINFO("stepCount: {}", stepCount);
-    LOGINFO("automate_callback end ... ");
     showStep(puzzle, steps[stepCount], stepCount, dimension);
     setText(puzzle, ui, dimension * dimension);
     setColor(puzzle, ui, dimension * dimension);
@@ -409,11 +405,8 @@ void MainWindow::on_pushButton_14_toggled(bool checked) // Auto button
     int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
     if(paused_ == kRunning)
     {
-        LOGINFO("on_14_toggled begin ...");
         steps = entry(puzzle, dimension, stepsNeeded);
         stepCount = 0;
-        printPuzzle(puzzle, dimension);
-        LOGINFO("on_14_toggled end ...");
         QTimer::singleShot(autoSpeed, this, &MainWindow::automate_callback);
     }
     cout<<stepsNeeded<<endl;

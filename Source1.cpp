@@ -1,4 +1,5 @@
 #include<iostream>
+#include<string>
 #include "utilities.h"
 #include "Source1.h"
 using namespace std;
@@ -68,19 +69,20 @@ void updateStepCount(int* step, int& stepCount)
     stepCount = i;
 }
 
-long generateCode(int* puzzle, int dimension)
+string generateCode(int* puzzle, int dimension)
 {
-    long code = 0;
+    string code;
     for (int i = 0; i < dimension * dimension; i++)
     {
-        code += i*i*puzzle[i]*puzzle[i];
+        code += (char)(puzzle[i] + 48);
+        code += " ";
     }
     return code;
 }
 
 int* simplify(int* steps, int& stepCount, int* original, int dimension)
 {
-    long long* recordPuzzle = new long long[stepCount + 1];
+    string* recordPuzzle = new string[stepCount + 1];
     int* simplifiedSteps = new int[stepCount];
     int sliderLoc = checkLocation(original, 0, dimension * dimension);
     int i = 0;
