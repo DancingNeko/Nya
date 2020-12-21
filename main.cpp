@@ -9,8 +9,6 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    // save cout buffer
-    utilitiesInitialize("temp.log");
 
     QApplication a(argc, argv);
     MainWindow w;
@@ -19,8 +17,6 @@ int main(int argc, char *argv[])
     w.show();
     auto res = a.exec();
 
-    // restore cout old buffer
-    utilitiesUninitializePrint();
 
     return res;
 }

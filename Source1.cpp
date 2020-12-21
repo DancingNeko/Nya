@@ -68,24 +68,47 @@ void updateStepCount(int* step, int& stepCount)
     stepCount = i;
 }
 
-int* simplify(int* steps, int& stepCount)
+long generateCode(int* puzzle, int dimension)
 {
-    int i;
-    int repeatCount = -1;//randomly assign tempPuzzle value that's not 0
-    while (repeatCount != 0)
+    long code = 0;
+    for (int i = 0; i < dimension * dimension; i++)
     {
-        i = 0;
-        repeatCount = 0;
-        while (i < stepCount - 1)
-        {
-            if (check_repeat(&steps[i]))
-                repeatCount++;
-            i++;
-        }
-        steps = deleteBlanks(steps, stepCount);
-        updateStepCount(steps, stepCount);
+        code += i*i*puzzle[i]*puzzle[i];
     }
-    return steps;
+    return code;
+}
+
+int* simplify(int* steps, int& stepCount, int* original, int dimension)
+{
+    long long* recordPuzzle = new long long[stepCount + 1];
+    int* simplifiedSteps = new int[stepCount];
+    int sliderLoc = checkLocation(original, 0, dimension * dimension);
+    int i = 0;
+    int translate[] = { 0, -dimension, +dimension, -1, +1 };
+    do {
+        recordPuzzle[i] = generateCode(original, dimension);
+        if(i != stepCount)
+        moveSlider(original, sliderLoc, translate[*(steps + i)], dimension, dimension);
+        i++;
+    } while (i <= stepCount);
+    i = 0;
+    int k = 0;
+    while (i < stepCount)
+    {
+        for (int j =stepCount; j >= i; j--)
+        {
+            if (recordPuzzle[j] == recordPuzzle[i])
+            {
+                i = j;
+                break;
+            }
+        }
+        simplifiedSteps[k] = steps[i];
+        k++;
+        i++;
+    }
+    stepCount = k - 1;
+    return simplifiedSteps;
 }
 
 step* recordStep(int dir, step* add)//up:1 ;down:2 ;left:3 ;right:4
@@ -640,6 +663,8 @@ int* entry(int tempPuzzle[], int dimension, int& stepsNeeded)
     {
         puzzle[copy] = tempPuzzle[copy];
     }
+    int* puzzleBackup = new int[dimension * dimension];
+    memcpy_s(puzzleBackup, dimension * dimension * sizeof(int), puzzle, dimension * dimension * sizeof(int));
     head->n = 0;
     autoComplete(puzzle, dimension);
     add = head;
@@ -659,7 +684,7 @@ int* entry(int tempPuzzle[], int dimension, int& stepsNeeded)
         i++;
         delete temp;
     }
-     steps = simplify(steps, stepCount);
+     steps = simplify(steps, stepCount,puzzleBackup,dimension);
      stepsNeeded = stepCount;
     return steps;
 }

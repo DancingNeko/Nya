@@ -21,7 +21,7 @@ QImage BCImage1(QString(":/frame1.png"));
 QImage BCImage2(QString(":/frame2.png"));
 QImage BCImage(QString(":/frame.png"));
 QImage BCImage4(QString(":/animeCongrats.png"));
-QImage BCImage3(QString(":frame3.png"));
+QImage BCImage3(QString(":/frame3.png"));
 int* steps;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -412,6 +412,7 @@ void MainWindow::on_pushButton_14_toggled(bool checked) // Auto button
         LOGINFO("on_14_toggled end ...");
         QTimer::singleShot(autoSpeed, this, &MainWindow::automate_callback);
     }
+    cout<<stepsNeeded<<endl;
 }
 
 
