@@ -15,12 +15,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     play.cpp \
+    uiplay.cpp \
     utilities.cpp
 
 HEADERS += \
     Source1.h \
     mainwindow.h \
     play.h \
+    uiplay.h \
     utilities.h
 
 FORMS += \
