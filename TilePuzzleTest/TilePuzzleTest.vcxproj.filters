@@ -39,12 +39,21 @@
     <ClCompile Include="test_castPuzzle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\play.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
+    <ClCompile Include="test_initializePuzzle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source1.h">
       <Filter>target</Filter>
     </ClInclude>
     <ClInclude Include="..\utilities.h">
+      <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\play.h">
       <Filter>target</Filter>
     </ClInclude>
   </ItemGroup>

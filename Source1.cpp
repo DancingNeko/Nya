@@ -134,9 +134,10 @@ void LLEdgeProcessing(int tempPuzzle[], int target, int dim)//LOWER LEFT corner 
             moveSlider(tempPuzzle, sliderLoc, -1, dim, dim);
     }
     targetLoc = checkLocation(tempPuzzle, target, dim * dim);
-    if (targetLoc / dim == 1)
+    while (targetLoc / dim < dim - 2) { // let's move targe to the last two rows, which is movable area for LLEdgeProcessing.
         moveTargetDown(tempPuzzle, sliderLoc, targetLoc, dim, dim);
-    targetLoc = checkLocation(tempPuzzle, target, dim * dim);
+        targetLoc = checkLocation(tempPuzzle, target, dim * dim);
+    }
     if (targetLoc % dim == dim - 1)
     {
         while (sliderLoc % dim != targetLoc % dim - 1)
@@ -687,6 +688,7 @@ int* entry(int tempPuzzle[], int dimension, int& stepsNeeded)
         delete temp;
     }
      steps = simplify(steps, stepCount,puzzleBackup,dimension);
+     delete []puzzleBackup;
      stepsNeeded = stepCount;
     return steps;
 }
