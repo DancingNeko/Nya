@@ -11,11 +11,15 @@
 #include <QTimer>
 #include "utilities.h"
 #include <assert.h>
+
+#include "uiplay.h"
+
 using namespace std;
 
 int autoSpeed=1000;
 static int* s_9_puzzle = new int [9];
 static int* s_16_puzzle= new int [16];
+static int * s_25_puzzle = new int[25];
 int stepCount=0;
 int dimension;
 QImage BCImage1(QString(":/frame1.png"));
@@ -24,6 +28,20 @@ QImage BCImage(QString(":/frame.png"));
 QImage BCImage4(QString(":/animeCongrats.png"));
 QImage BCImage3(QString(":/frame3.png"));
 int* steps;
+
+int * getPuzzleByDimension(int dim) {
+    switch (dim) {
+    case 3:
+        return s_9_puzzle;
+    case 4:
+        return s_16_puzzle;
+    case 5:
+        return s_25_puzzle;
+    default:
+        assert(false);
+        return nullptr;
+    }
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -97,6 +115,10 @@ MainWindow::MainWindow(QWidget *parent)
         *(s_16_puzzle+i)=i+1;
     }
     *(s_16_puzzle+15)=0;
+    for (int i = 0; i < 25; i++) {
+        s_25_puzzle[i] = i+1;
+    }
+    s_25_puzzle[24] = 0;
     ui->label_6->setStyleSheet("background-image: url(:/frame.png);");
     ui->pushButton_10->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
     ui->restart_2->setStyleSheet("background-color:rgb(142,196,255); color:rgb(255,255,255)");
@@ -221,8 +243,8 @@ void MainWindow::on_pushButton_10_clicked() // 3 x 3 button
 {
     dimension = 3;
     s_9_puzzle=initializePuzzle(s_9_puzzle,100000,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
     ui->pushButton->setVisible(true);
     ui->pushButton_2->setVisible(true);
     ui->pushButton_3->setVisible(true);
@@ -242,64 +264,64 @@ void MainWindow::on_pushButton_10_clicked() // 3 x 3 button
 void MainWindow::on_pushButton_clicked()
 {
     operate(s_9_puzzle,0,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
     operate(s_9_puzzle,1,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
     operate(s_9_puzzle,2,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
 }
 
 void MainWindow::on_pushButton_4_clicked()
 {
     operate(s_9_puzzle,3,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
 }
 
 void MainWindow::on_pushButton_5_clicked()
 {
     operate(s_9_puzzle,4,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
 }
 
 void MainWindow::on_pushButton_6_clicked()
 {
     operate(s_9_puzzle,5,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
 }
 
 void MainWindow::on_pushButton_7_clicked()
 {
     operate(s_9_puzzle,6,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
 }
 
 void MainWindow::on_pushButton_8_clicked()
 {
     operate(s_9_puzzle,7,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
 }
 
 void MainWindow::on_pushButton_9_clicked()
 {
     operate(s_9_puzzle,8,9);
-    setText(s_9_puzzle,ui,9);
-    setColor(s_9_puzzle,ui,9);
+    resetPuzzleText(s_9_puzzle,3);
+    resetPuzzleColor(s_9_puzzle,3);
     if(checkComplete(s_9_puzzle, 9))
     {
         repaint();
@@ -376,7 +398,7 @@ void MainWindow::on_pushButton_13_clicked()
 }
 
 void MainWindow::automate_callback() {
-    int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
+    int* puzzle = getPuzzleByDimension(dimension);
     if (paused_ != kRunning) {
         return;
     }
@@ -389,8 +411,8 @@ void MainWindow::automate_callback() {
     QString stepCountNum = QString::number(stepCount);
     ui->pushButton_14->setText(stepCountNum);
     showStep(puzzle, steps[stepCount], stepCount, dimension);
-    setText(puzzle, ui, dimension * dimension);
-    setColor(puzzle, ui, dimension * dimension);
+    resetPuzzleText(puzzle, dimension);
+    resetPuzzleColor(puzzle, dimension);
     ui->centralwidget->repaint();
     QTimer::singleShot(autoSpeed, this, &MainWindow::automate_callback);
 }
@@ -402,14 +424,13 @@ void MainWindow::on_pushButton_14_toggled(bool checked) // Auto button
     }
     int stepsNeeded;
     switchAutoState();
-    int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
+    int* puzzle = getPuzzleByDimension(dimension);
     if(paused_ == kRunning)
     {
         steps = entry(puzzle, dimension, stepsNeeded);
         stepCount = 0;
         QTimer::singleShot(autoSpeed, this, &MainWindow::automate_callback);
     }
-    cout<<stepsNeeded<<endl;
 }
 
 
@@ -450,113 +471,113 @@ void MainWindow::on_restart_clicked()
 void MainWindow::on_four_1_clicked()
 {
     operate(s_16_puzzle,0,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_2_clicked()
 {
     operate(s_16_puzzle,1,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_3_clicked()
 {
     operate(s_16_puzzle,2,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_4_clicked()
 {
     operate(s_16_puzzle,3,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_5_clicked()
 {
     operate(s_16_puzzle,4,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_6_clicked()
 {
     operate(s_16_puzzle,5,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_7_clicked()
 {
     operate(s_16_puzzle,6,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_8_clicked()
 {
     operate(s_16_puzzle,7,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_9_clicked()
 {
     operate(s_16_puzzle,8,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_10_clicked()
 {
     operate(s_16_puzzle,9,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_11_clicked()
 {
     operate(s_16_puzzle,10,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_12_clicked()
 {
     operate(s_16_puzzle,11,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_13_clicked()
 {
     operate(s_16_puzzle,12,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_14_clicked()
 {
     operate(s_16_puzzle,13,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_15_clicked()
 {
     operate(s_16_puzzle,14,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
 }
 
 void MainWindow::on_four_16_clicked()
 {
     operate(s_16_puzzle,15,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
     if(checkComplete(s_16_puzzle, 16))
     {
         cout<<"done"<<endl;
@@ -577,8 +598,8 @@ void MainWindow::on_pushButton_15_clicked()
 {
     dimension = 4;
     s_16_puzzle=initializePuzzle(s_16_puzzle,100000,16);
-    setText(s_16_puzzle,ui,16);
-    setColor(s_16_puzzle,ui,16);
+    resetPuzzleText(s_16_puzzle,4);
+    resetPuzzleColor(s_16_puzzle,4);
     ui->four_1->setVisible(true);
     ui->four_2->setVisible(true);
     ui->four_3->setVisible(true);
@@ -622,7 +643,7 @@ void MainWindow::switchAutoState() {
         break;
     case kRunning:
     {
-        int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
+        int* puzzle = getPuzzleByDimension(dimension);
         if (checkComplete(puzzle, dimension * dimension)) {
             paused_ = kInitial;
             toBeInitial();
@@ -659,7 +680,7 @@ void MainWindow::toBeInitial() {
     ui->pushButton_14->setText("Auto");
     ui->pushButton_14->setVisible(true);
 
-    int* puzzle = dimension == 3 ? s_9_puzzle : s_16_puzzle;
+    int* puzzle = getPuzzleByDimension(dimension);
     if (checkComplete(puzzle, dimension * dimension)) {
         ui->label->setVisible(true);
         ui->label->raise();
@@ -675,14 +696,20 @@ void MainWindow::toBeInitial() {
 }
 
 void MainWindow::on_penta_puzzle_trigger_clicked() {
+    dimension = 5;
+    s_25_puzzle = initializePuzzle(s_25_puzzle, 100000, 25);
+    resetPuzzleText(s_25_puzzle, 5);
+    resetPuzzleColor(s_25_puzzle, 5);
     setPentaPuzzleVisibility(true);
     ui->pushButton_10->setVisible(false);
     ui->pushButton_15->setVisible(false);
+    ui->pushButton_14->setVisible(true);
     this->pentaPuzzleTriggerButton->setVisible(false);
     ui->label_3->setVisible(true);
     ui->label_4->setVisible(true);
     ui->label_5->setVisible(true);
     ui->horizontalSlider->setVisible(true);
+    setPentaPuzzleTriggerButtonVisibility(false);
 }
 
 static int getPuzzleButtonIndex(QPushButton *puzzle[], QPushButton * btn, int size) {
@@ -698,3 +725,34 @@ void MainWindow::on_penta_puzzle_clicked() {
     int ix = getPuzzleButtonIndex(pentaPushButton, sender, PENTA*PENTA);
     assert(ix >= 0);
 }
+
+void MainWindow::resetPuzzleText(const int * tempPuzzle, int dim) {
+    switch (dim) {
+    case 3:
+    case 4:
+        setPuzzleText(tempPuzzle, ui, dim*dim);
+        break;
+    case 5:
+        setPuzzleText(tempPuzzle, pentaPushButton, dim*dim);
+        break;
+    default:
+        assert(false);
+        return;
+    }
+}
+
+void MainWindow::resetPuzzleColor(const int * tempPuzzle, int dim) {
+    switch (dim) {
+    case 3:
+    case 4:
+        setPuzzleColor(tempPuzzle, ui, dim*dim);
+        break;
+    case 5:
+        setPuzzleColor(tempPuzzle, pentaPushButton, dim*dim);
+        break;
+    default:
+        assert(false);
+        return;
+    }
+}
+

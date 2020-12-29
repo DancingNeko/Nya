@@ -1,0 +1,17 @@
+
+#include <gtest/gtest.h>
+#include "play.h"
+
+TEST(initializePuzzle, test_1) {
+    int puzzle[25] = { 
+        1, 2, 3, 4, 5, 
+        6, 7, 8, 9, 10,
+        11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20,
+        21, 22, 23, 24, 0,
+    };
+    int * puzzleTemp = initializePuzzle(puzzle, 100000, 25);
+    /// int* puzzleTemp = puzzle;
+    ASSERT_TRUE(puzzleTemp != nullptr);
+}
+

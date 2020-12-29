@@ -105,6 +105,8 @@ private:
     void connectPentaPuzzle();
 
     void setPentaPuzzleText(const int * puzzle = nullptr);
+    void resetPuzzleText(const int * puzzle, int dim);
+    void resetPuzzleColor(const int * puzzle, int dim);
 
 private:
     // AutoState: 
